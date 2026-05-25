@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Paralaje narrativo</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header class="portada">
+      <div class="portada-fondo" aria-hidden="true">
+        <span class="capa capa-1"></span>
+        <span class="capa capa-2"></span>
+        <span class="capa capa-3"></span>
+      </div>
+      <div class="portada-texto">
+        <p class="etiqueta">Plantilla de scrollytelling</p>
+        <h1>Observatorio Digital 2024</h1>
+        <p class="bajada">
+          Una historia visual sobre conectividad, crecimiento digital y uso de plataformas.
+        </p>
+        <p class="meta">Maricarmen Fernández Chapou - OMD-Tec - Fecha</2026>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <p class="lead">
+          El paralaje ayuda a convertir una lectura lineal en una experiencia guiada: la persona avanza, el texto marca el ritmo y la visualización responde.
+        </p>
+        <p>
+          Esta plantilla funciona como un punto de partida para historias al estilo scrollytelling. Reemplaza las escenas de ejemplo por mapas, gráficos, ilustraciones, fotografías o componentes hechos con datos.
+        </p>
+      </section>
+
+      <section class="relato" aria-label="Relato con paralaje">
+        <div class="escena" aria-hidden="true">
+          <div class="progreso">
+            <span id="barra-progreso"></span>
+          </div>
+
+          <div class="lienzo" id="lienzo">
+            <div id="observableChart"></div>
+
+  <div class="rotulo">
+    <p id="rotulo-etapa">Escena 1</p>
+    <strong id="rotulo-titulo">Conectividad digital</strong>
+  </div>
+</div>
+
+            <div class="mapa">
+              <span class="zona zona-a"></span>
+              <span class="zona zona-b"></span>
+              <span class="zona zona-c"></span>
+              <span class="punto punto-a"></span>
+              <span class="punto punto-b"></span>
+              <span class="punto punto-c"></span>
+            </div>
+
+            <div class="grafico">
+              <span style="--alto: 34%"></span>
+              <span style="--alto: 58%"></span>
+              <span style="--alto: 76%"></span>
+              <span style="--alto: 46%"></span>
+            </div>
+
+            <div class="rotulo">
+              <p id="rotulo-etapa">Escena 1</p>
+              <strong id="rotulo-titulo">Ubicar el territorio</strong>
+            </div>
+          </div>
+        </div>
+
+      <article class="pasos">
+  <section class="paso activo" data-escena="territorio">
+    <p class="etiqueta">Escena 1</p>
+    <h2>Conectividad digital</h2>
+    <p>
+      La conectividad es más alta en el norte y centro, mientras que el sur y sureste presentan mayores retos de acceso.
+    </p>
+  </section>
+
+  <section class="paso" data-escena="cambio">
+    <p class="etiqueta">Escena 2</p>
+    <h2>Crecimiento mensual</h2>
+    <p>
+      El uso digital aumenta de forma constante durante el año, impulsado por el acceso móvil y las plataformas en línea.
+    </p>
+  </section>
+
+  <section class="paso" data-escena="contraste">
+    <p class="etiqueta">Escena 3</p>
+    <h2>Uso de plataformas</h2>
+    <p>
+      Las redes sociales concentran la mayor actividad, seguidas por educación, comercio digital y trámites en línea.
+    </p>
+  </section>
+
+  <section class="paso" data-escena="detalle">
+    <p class="etiqueta">Escena 4</p>
+    <h2>Comparación por dispositivo</h2>
+    <p>
+      El teléfono móvil domina el acceso cotidiano, mientras que la computadora conserva fuerza en educación y trámites.
+    </p>
+  </section>
+</article>
+
+      </section>
+
+      <section class="cierre">
+        <p class="etiqueta">Cierre</p>
+        <h2>Qué debe quedar después del recorrido</h2>
+        <p>
+          Resume la idea central y explica cómo leer el movimiento: qué significa cada transición, qué decisión editorial tomaste y qué límites tienen los datos.
+        </p>
+      </section>
+    </main>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
