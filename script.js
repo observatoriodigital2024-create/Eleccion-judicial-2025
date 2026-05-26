@@ -1,3 +1,4 @@
+import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot/+esm";
 const pasos = [...document.querySelectorAll(".paso")];
 const relato = document.querySelector(".relato");
 const lienzo = document.querySelector("#lienzo");
@@ -274,3 +275,41 @@ const observer = new IntersectionObserver((entries) => {
 pasos.forEach(paso => observer.observe(paso));
 
 activarEscena(0);
+
+const chartContainer = document.querySelector("#observableChart");
+
+const conectividad = [
+  {region: "Norte", valor: 82},
+  {region: "Centro", valor: 76},
+  {region: "Occidente", valor: 69},
+  {region: "Sur", valor: 58},
+  {region: "Sureste", valor: 54}
+];
+
+function graficoBarras() {
+  chartContainer.innerHTML = "";
+
+  const chart = Plot.plot({
+    width: 650,
+    height: 420,
+    marginLeft: 70,
+    style: {
+      background: "transparent",
+      color: "#e5e7eb"
+    },
+    x: {label: "Región"},
+    y: {grid: true, label: "Conectividad (%)"},
+    marks: [
+      Plot.barY(conectividad, {
+        x: "region",
+        y: "valor",
+        fill: "#38bdf8"
+      }),
+      Plot.ruleY([0])
+    ]
+  });
+
+  chartContainer.append(chart);
+}
+
+graficoBarras();
