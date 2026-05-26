@@ -39,7 +39,8 @@ p {
   align-items: end;
   overflow: hidden;
   padding: 5rem max(1.25rem, 8vw);
-  background: #17211f;
+  background: linear-gradient(180deg, #0f172a 0%, #111827 70%, #0f172a 85%, #60a5fa 100%);
+  box-shadow: inset 0 -14rem 28rem rgba(96, 165, 250, 0.24);
   color: #fff;
 }
 
@@ -59,12 +60,12 @@ p {
 }
 
 .capa-1 {
-  color: #315e5a;
+  color: #8b5cf6;
   --movimiento: 0;
 }
 
 .capa-2 {
-  color: #25433f;
+  color: #6d28d9;
   bottom: -8vh;
   height: 62vh;
   --movimiento: 4vh;
@@ -172,11 +173,11 @@ h1 {
   min-height: 680px;
   position: relative;
   overflow: hidden;
-  border: 1px solid var(--linea);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  background:
-    linear-gradient(180deg, #dce9e8 0%, #f7e5ba 52%, #e4d1a8 100%);
-  box-shadow: 0 24px 60px rgba(37, 36, 28, 0.14);
+  background: #111827;
+  color: #f8fafc;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
   transition: background 0.6s ease;
 }
 
@@ -229,8 +230,8 @@ h1 {
 }
 
 .zona {
-  border: 2px solid rgba(32, 34, 32, 0.2);
-  background: rgba(255, 255, 255, 0.28);
+  border: none;
+  background: none !important;
   transition: background 0.5s ease, transform 0.5s ease;
 }
 
@@ -250,12 +251,7 @@ h1 {
 }
 
 .punto {
-  width: 1rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--rojo);
-  box-shadow: 0 0 0 0 rgba(184, 66, 63, 0.32);
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  display: none;
 }
 
 .punto-a {
@@ -304,14 +300,14 @@ h1 {
   bottom: 1.25rem;
   width: min(360px, calc(100% - 2.5rem));
   padding: 1rem;
-  border: 1px solid rgba(32, 34, 32, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
-  background: var(--panel);
+  background: rgba(15, 23, 42, 0.88);
   backdrop-filter: blur(10px);
 }
 
 .rotulo p {
-  color: var(--muted);
+  color: #cbd5e1;
   font-size: 0.82rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -361,8 +357,7 @@ h1 {
 }
 
 .lienzo[data-escena="cambio"] {
-  background:
-    linear-gradient(180deg, #b9d5d6 0%, #f0d59c 50%, #d7ba87 100%);
+  background: linear-gradient(180deg, #111827 0%, #1f2937 45%, #111827 100%);
 }
 
 .lienzo[data-escena="cambio"] .montana-fondo {
@@ -459,4 +454,5 @@ h1 {
   min-height: 430px;
   display: grid;
   place-items: center;
+  background: none !important;
 }
