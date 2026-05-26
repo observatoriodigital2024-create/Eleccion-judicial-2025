@@ -373,3 +373,380 @@ window.addEventListener("resize", actualizarProgreso);
 
 activarEscena(0);
 actualizarProgreso();
+
+/* ============================================================
+   SEGUNDA SECCIÓN: PROPUESTAS Y NARRATIVAS
+   ============================================================ */
+
+const pasos2 = Array.from(document.querySelectorAll(".paso-secundario"));
+const relato2 = document.querySelector(".relato-secundario");
+const barraProgreso2 = document.querySelector("#barra-progreso-2");
+const rotuloEtapa2 = document.querySelector("#rotulo-etapa-2");
+const rotuloTitulo2 = document.querySelector("#rotulo-titulo-2");
+const chartContainer2 = document.querySelector("#observableChart2");
+
+const escenas2 = [
+  {id: "vinculantes", etiqueta: "Escena 1", titulo: "Propuestas vinculantes vs. narrativas de campaña"},
+  {id: "temas-juridicos", etiqueta: "Escena 2", titulo: "Los temas jurídicos más sólidos"},
+  {id: "tecnico-politico", etiqueta: "Escena 3", titulo: "Entre lo técnico y lo político"},
+  {id: "diferencias-genero", etiqueta: "Escena 4", titulo: "Diferencias discursivas por género"},
+  {id: "palabras-dominantes", etiqueta: "Escena 5", titulo: "Las palabras que dominaron el discurso"}
+];
+
+const datos2 = {
+  vinculantes: [
+    {tipo: "Vinculantes", porcentaje: 60},
+    {tipo: "No vinculantes", porcentaje: 40}
+  ],
+  temas: [
+    {tema: "Derechos constitucionales e igualdad", lda: 21.43, nmf: 4.76},
+    {tema: "Mecanismos legales y juicios", lda: 21.43, nmf: 9.52},
+    {tema: "Sistema judicial y Federación", lda: 9.52, nmf: 21.43},
+    {tema: "Opiniones y percepciones generales", lda: 4.76, nmf: 21.43}
+  ],
+  nivel: [
+    {nivel: "Técnico-normativo", porcentaje: 42.86},
+    {nivel: "Sistémico-político", porcentaje: 42.86}
+  ],
+  genero: {
+    nodes: [
+      {id: "Discurso judicial", grupo: "centro", size: 50},
+      {id: "Justicia social", grupo: "mujeres", size: 30},
+      {id: "Equidad", grupo: "mujeres", size: 28},
+      {id: "Perspectiva de género", grupo: "mujeres", size: 32},
+      {id: "Derechos humanos", grupo: "mujeres", size: 26},
+      {id: "Acceso a la justicia", grupo: "mujeres", size: 24},
+      {id: "Capacitación", grupo: "mujeres", size: 22},
+      {id: "Combate a la corrupción", grupo: "hombres", size: 32},
+      {id: "Modernización", grupo: "hombres", size: 28},
+      {id: "Transparencia", grupo: "hombres", size: 26},
+      {id: "Reforma judicial", grupo: "hombres", size: 30},
+      {id: "Eficiencia", grupo: "hombres", size: 24},
+      {id: "Estructura", grupo: "hombres", size: 22}
+    ],
+    links: [
+      {source: "Discurso judicial", target: "Justicia social"},
+      {source: "Discurso judicial", target: "Equidad"},
+      {source: "Discurso judicial", target: "Perspectiva de género"},
+      {source: "Discurso judicial", target: "Derechos humanos"},
+      {source: "Discurso judicial", target: "Acceso a la justicia"},
+      {source: "Discurso judicial", target: "Capacitación"},
+      {source: "Discurso judicial", target: "Combate a la corrupción"},
+      {source: "Discurso judicial", target: "Modernización"},
+      {source: "Discurso judicial", target: "Transparencia"},
+      {source: "Discurso judicial", target: "Reforma judicial"},
+      {source: "Discurso judicial", target: "Eficiencia"},
+      {source: "Discurso judicial", target: "Estructura"}
+    ]
+  },
+  palabras: [
+    {palabra: "Justicia", frecuencia: 100},
+    {palabra: "Corte", frecuencia: 85},
+    {palabra: "Derecho", frecuencia: 78},
+    {palabra: "Reforma judicial", frecuencia: 70},
+    {palabra: "Poder Judicial", frecuencia: 65},
+    {palabra: "Amparo", frecuencia: 42},
+    {palabra: "Mujeres", frecuencia: 34},
+    {palabra: "Acceso a la justicia", frecuencia: 32},
+    {palabra: "Indígenas", frecuencia: 22},
+    {palabra: "Discapacidad", frecuencia: 20}
+  ]
+};
+
+function limpiarGrafico2() {
+  if (!chartContainer2) return;
+  chartContainer2.innerHTML = "";
+}
+
+function graficoVinculantes() {
+  limpiarGrafico2();
+  const chart = Plot.plot({
+    width: 650,
+    height: 420,
+    marginLeft: 70,
+    style: {
+      background: "none",
+      color: "#e5e7eb",
+      fontSize: "14px"
+    },
+    x: {label: "Tipo de propuesta", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    y: {grid: true, label: "Porcentaje (%)", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    marks: [
+      Plot.barY(datos2.vinculantes, {
+        x: "tipo",
+        y: "porcentaje",
+        fill: d => d.tipo === "Vinculantes" ? "#06b6d4" : "#ec4899"
+      }),
+      Plot.text(datos2.vinculantes, {
+        x: "tipo",
+        y: "porcentaje",
+        text: d => `${d.porcentaje}%`,
+        dy: -12,
+        fill: "#cbd5e1"
+      }),
+      Plot.ruleY([0])
+    ]
+  });
+  chartContainer2.append(chart);
+}
+
+function graficoTemasJuridicos() {
+  limpiarGrafico2();
+  const chart = Plot.plot({
+    width: 650,
+    height: 420,
+    marginLeft: 180,
+    style: {
+      background: "none",
+      color: "#e5e7eb",
+      fontSize: "12px"
+    },
+    x: {grid: true, label: "Peso (%)", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    y: {label: null, tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    marks: [
+      Plot.barX(datos2.temas, {
+        y: "tema",
+        x: "lda",
+        fill: "#06b6d4",
+        sort: {y: "x", reverse: true},
+        title: "LDA"
+      }),
+      Plot.barX(datos2.temas, {
+        y: "tema",
+        x: d => -d.nmf,
+        fill: "#8b5cf6",
+        title: "NMF"
+      }),
+      Plot.ruleX([0])
+    ]
+  });
+  chartContainer2.append(chart);
+}
+
+function graficoTecnicoPolitico() {
+  limpiarGrafico2();
+  const chart = Plot.plot({
+    width: 650,
+    height: 420,
+    marginLeft: 150,
+    style: {
+      background: "none",
+      color: "#e5e7eb",
+      fontSize: "14px"
+    },
+    x: {grid: true, label: "Porcentaje (%)", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    y: {label: null, tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    marks: [
+      Plot.barX(datos2.nivel, {
+        y: "nivel",
+        x: "porcentaje",
+        fill: "#06b6d4"
+      }),
+      Plot.text(datos2.nivel, {
+        y: "nivel",
+        x: "porcentaje",
+        text: d => `${d.porcentaje}%`,
+        dx: 8,
+        fill: "#cbd5e1"
+      })
+    ]
+  });
+  chartContainer2.append(chart);
+}
+
+function graficoGenero() {
+  limpiarGrafico2();
+  
+  const width = 650;
+  const height = 420;
+  
+  const svg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [0, 0, width, height])
+    .style("background", "none");
+  
+  const nodes = datos2.genero.nodes.map(d => ({...d}));
+  const links = datos2.genero.links.map(d => ({...d}));
+  
+  const simulation = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.source.grupo === "centro" ? 60 : 100))
+    .force("charge", d3.forceManyBody().strength(-250))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+  
+  const link = svg.append("g")
+    .selectAll("line")
+    .data(links)
+    .join("line")
+    .attr("class", "network-link")
+    .attr("stroke-width", 1.5);
+  
+  const node = svg.append("g")
+    .selectAll("g")
+    .data(nodes)
+    .join("g")
+    .attr("class", "network-node")
+    .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended));
+  
+  node.append("circle")
+    .attr("r", d => {
+      if (d.grupo === "centro") return 12;
+      return Math.sqrt(d.size) * 2;
+    })
+    .attr("fill", d => {
+      if (d.grupo === "centro") return "#fbbf24";
+      if (d.grupo === "mujeres") return "#ec4899";
+      return "#3b82f6";
+    });
+  
+  node.append("text")
+    .attr("class", "network-label")
+    .attr("font-size", d => d.grupo === "centro" ? "11px" : "10px")
+    .attr("font-weight", d => d.grupo === "centro" ? "bold" : "normal")
+    .text(d => d.id);
+  
+  simulation.on("tick", () => {
+    link
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+    
+    node.attr("transform", d => `translate(${d.x},${d.y})`);
+  });
+  
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+  
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+  
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+  
+  chartContainer2.append(svg.node());
+}
+
+function graficoPalabras() {
+  limpiarGrafico2();
+  
+  const width = 650;
+  const height = 420;
+  
+  // Crear un array único por visualización
+  const datosPalabras = datos2.palabras;
+  
+  // Calcular posiciones circulares
+  const numPalabras = datosPalabras.length;
+  const radiusScale = d3.scaleLinear()
+    .domain([0, d3.max(datosPalabras, d => d.frecuencia)])
+    .range([10, 80]);
+  
+  const posiciones = datosPalabras.map((d, i) => {
+    const angle = (i / numPalabras) * Math.PI * 2;
+    const radius = radiusScale(d.frecuencia);
+    return {
+      ...d,
+      x: width / 2 + radius * Math.cos(angle),
+      y: height / 2 + radius * Math.sin(angle),
+      r: Math.sqrt(d.frecuencia) * 3
+    };
+  });
+  
+  const svg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [0, 0, width, height])
+    .style("background", "none");
+  
+  svg.selectAll("circle")
+    .data(posiciones)
+    .join("circle")
+    .attr("cx", d => d.x)
+    .attr("cy", d => d.y)
+    .attr("r", d => d.r)
+    .attr("fill", (d, i) => {
+      const colores = ["#06b6d4", "#8b5cf6", "#ec4899", "#fbbf24", "#3b82f6"];
+      return colores[i % colores.length];
+    })
+    .attr("opacity", 0.7);
+  
+  svg.selectAll("text")
+    .data(posiciones)
+    .join("text")
+    .attr("x", d => d.x)
+    .attr("y", d => d.y)
+    .attr("class", "network-label")
+    .attr("font-size", d => Math.min(d.r / 2, 14) + "px")
+    .attr("text-anchor", "middle")
+    .attr("dominant-baseline", "middle")
+    .text(d => d.palabra)
+    .attr("fill", "#fff");
+  
+  chartContainer2.append(svg.node());
+}
+
+const funcionesGraficos2 = [
+  graficoVinculantes,
+  graficoTemasJuridicos,
+  graficoTecnicoPolitico,
+  graficoGenero,
+  graficoPalabras
+];
+
+function activarEscena2(index) {
+  pasos2.forEach((paso, i) => paso.classList.toggle("activo", i === index));
+  
+  const escena = escenas2[index] || escenas2[0];
+  rotuloEtapa2.textContent = escena.etiqueta;
+  rotuloTitulo2.textContent = escena.titulo;
+  barraProgreso2.style.width = `${((index + 1) / pasos2.length) * 100}%`;
+  
+  const funcion = funcionesGraficos2[index] || funcionesGraficos2[0];
+  funcion();
+}
+
+function actualizarProgreso2() {
+  if (!relato2) return;
+  
+  const inicio = relato2.offsetTop;
+  const final = relato2.offsetTop + relato2.offsetHeight - window.innerHeight;
+  if (final <= inicio) return;
+  
+  const avance = (window.scrollY - inicio) / (final - inicio);
+  const porcentaje = Math.min(100, Math.max(0, avance * 100));
+  barraProgreso2.style.width = `${porcentaje}%`;
+}
+
+const observer2 = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const index = pasos2.indexOf(entry.target);
+        if (index >= 0) {
+          activarEscena2(index);
+        }
+      }
+    });
+  },
+  {
+    root: null,
+    threshold: 0.55
+  }
+);
+
+pasos2.forEach((paso) => observer2.observe(paso));
+window.addEventListener("scroll", actualizarProgreso2, { passive: true });
+
+activarEscena2(0);
