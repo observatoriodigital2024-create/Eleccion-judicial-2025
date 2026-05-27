@@ -11,7 +11,7 @@ const chartContainer = document.querySelector("#observableChart");
 const escenas = [
   {id: "tiktok-justicia", etiqueta: "1", titulo: "La justicia entra a TikTok"},
   {id: "acordeon", etiqueta: "2", titulo: "El auge del acordeón"},
-  {id: "dominancia", etiqueta: "3", titulo: "Quién domina la conversación"},
+  {id: "dominancia", etiqueta: "3", titulo: "Quién dominó la conversación"},
   {id: "red-narrativas", etiqueta: "4", titulo: "Red de usuarios y narrativas"},
   {id: "palabras-clave", etiqueta: "5", titulo: "La conversación cambia de palabras clave"},
   {id: "emociones", etiqueta: "6", titulo: "La disputa emocional"}
@@ -578,18 +578,18 @@ const rotuloTitulo2 = document.querySelector("#rotulo-titulo-2");
 const chartContainer2 = document.querySelector("#observableChart2");
 
 const escenas2 = [
-  {id: "vinculantes", etiqueta: "1", titulo: "Propuestas vinculantes vs. narrativas de campaña"},
+  {id: "vinculantes", etiqueta: "1", titulo: "Propuestas vs. narrativas de campaña"},
   {id: "temas-juridicos", etiqueta: "2", titulo: "Los temas jurídicos más sólidos"},
   {id: "tecnico-politico", etiqueta: "3", titulo: "Entre lo técnico y lo político"},
   {id: "diferencias-genero", etiqueta: "4", titulo: "Diferencias discursivas por género"},
   {id: "palabras-dominantes", etiqueta: "5", titulo: "Las palabras que dominaron el discurso"},
-  {id: "intencionalidad-discursiva", etiqueta: "6", titulo: "Propuestas e intencionalidad discursiva"}
+  {id: "intencionalidad-discursiva", etiqueta: "6", titulo: "Propuestas y discursos"}
 ];
 
 const datos2 = {
-  vinculantes: [
-    {tipo: "Propuestas reales", porcentaje: 60},
-    {tipo: "No vinculantes", porcentaje: 40}
+  relacionadas: [
+    {tipo: "Narrativas de campaña", porcentaje: 60},
+    {tipo: "Propuestas reales", porcentaje: 40}
   ],
   temas: [
     {tema: "Derechos constitucionales e igualdad", lda: 21.43, nmf: 4.76},
@@ -598,7 +598,7 @@ const datos2 = {
     {tema: "Opiniones y percepciones generales", lda: 4.76, nmf: 21.43}
   ],
   nivel: [
-    {nivel: "Técnico-normativo", porcentaje: 62.86},
+    {nivel: "Técnico-normativo", porcentaje: 42.86},
     {nivel: "Sistémico-político", porcentaje: 42.86}
   ],
   genero: {
@@ -665,12 +665,12 @@ function graficoVinculantes() {
     x: {label: "Tipo de propuesta", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     y: {grid: true, label: "Porcentaje (%)", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     marks: [
-      Plot.barY(datos2.vinculantes, {
+      Plot.barY(datos2.relacionadas, {
         x: "tipo",
         y: "porcentaje",
-        fill: d => d.tipo === "Vinculantes" ? "#1b75bb" : "#ec4899"
+        fill: d => d.tipo === "Relacionadas" ? "#1b75bb" : "#ec4899"
       }),
-      Plot.text(datos2.vinculantes, {
+      Plot.text(datos2.relacionadas, {
         x: "tipo",
         y: "porcentaje",
         text: d => `${d.porcentaje}%`,
