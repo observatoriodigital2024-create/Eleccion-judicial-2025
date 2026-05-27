@@ -13,7 +13,8 @@ const escenas = [
   {id: "acordeon", etiqueta: "2", titulo: "El auge del acordeón"},
   {id: "dominancia", etiqueta: "3", titulo: "Quién domina la conversación"},
   {id: "red-narrativas", etiqueta: "4", titulo: "Red de usuarios y narrativas"},
-  {id: "emociones", etiqueta: "5", titulo: "La disputa emocional"}
+  {id: "palabras-clave", etiqueta: "5", titulo: "La conversación cambia de palabras clave"},
+  {id: "emociones", etiqueta: "6", titulo: "La disputa emocional"}
 ];
 
 const datos = {
@@ -323,8 +324,148 @@ const funcionesGraficos = [
   graficoAcordeon,
   graficoDominancia,
   graficoRed,
+  graficoHeatmapPalabras,
   graficoEmociones
 ];
+
+function graficoHeatmapPalabras() {
+  limpiarGrafico();
+  const heatmapDatos = [
+    {palabra: "#eleccionesjudiciales", mes: "oct24", total: 5},
+    {palabra: "#eleccionesjudiciales", mes: "nov24", total: 4},
+    {palabra: "#eleccionesjudiciales", mes: "dic24", total: 4},
+    {palabra: "#eleccionesjudiciales", mes: "ene25", total: 5},
+    {palabra: "#eleccionesjudiciales", mes: "feb25", total: 8},
+    {palabra: "#eleccionesjudiciales", mes: "mar25", total: 28},
+    {palabra: "#eleccionesjudiciales", mes: "abr25", total: 42},
+    {palabra: "#eleccionesjudiciales", mes: "may25", total: 58},
+    {palabra: "#eleccionesjudiciales", mes: "jun25", total: 65},
+    {palabra: "#eleccionesjudiciales", mes: "jul25", total: 24},
+    {palabra: "#eleccionesjudiciales", mes: "ago25", total: 9},
+    {palabra: "#eleccionesjudiciales", mes: "sep25", total: 8},
+    {palabra: "#eleccionesjudiciales", mes: "oct25", total: 7},
+
+    {palabra: "#eleccionjudicial", mes: "oct24", total: 6},
+    {palabra: "#eleccionjudicial", mes: "nov24", total: 5},
+    {palabra: "#eleccionjudicial", mes: "dic24", total: 4},
+    {palabra: "#eleccionjudicial", mes: "ene25", total: 6},
+    {palabra: "#eleccionjudicial", mes: "feb25", total: 10},
+    {palabra: "#eleccionjudicial", mes: "mar25", total: 30},
+    {palabra: "#eleccionjudicial", mes: "abr25", total: 44},
+    {palabra: "#eleccionjudicial", mes: "may25", total: 55},
+    {palabra: "#eleccionjudicial", mes: "jun25", total: 68},
+    {palabra: "#eleccionjudicial", mes: "jul25", total: 25},
+    {palabra: "#eleccionjudicial", mes: "ago25", total: 9},
+    {palabra: "#eleccionjudicial", mes: "sep25", total: 10},
+    {palabra: "#eleccionjudicial", mes: "oct25", total: 8},
+
+    {palabra: "#acordeon elecciones", mes: "oct24", total: 0},
+    {palabra: "#acordeon elecciones", mes: "nov24", total: 0},
+    {palabra: "#acordeon elecciones", mes: "dic24", total: 0},
+    {palabra: "#acordeon elecciones", mes: "ene25", total: 0},
+    {palabra: "#acordeon elecciones", mes: "feb25", total: 0},
+    {palabra: "#acordeon elecciones", mes: "mar25", total: 0},
+    {palabra: "#acordeon elecciones", mes: "abr25", total: 0},
+    {palabra: "#acordeon elecciones", mes: "may25", total: 68},
+    {palabra: "#acordeon elecciones", mes: "jun25", total: 62},
+    {palabra: "#acordeon elecciones", mes: "jul25", total: 42},
+    {palabra: "#acordeon elecciones", mes: "ago25", total: 18},
+    {palabra: "#acordeon elecciones", mes: "sep25", total: 5},
+    {palabra: "#acordeon elecciones", mes: "oct25", total: 4},
+
+    {palabra: "scjn", mes: "oct24", total: 4},
+    {palabra: "scjn", mes: "nov24", total: 7},
+    {palabra: "scjn", mes: "dic24", total: 3},
+    {palabra: "scjn", mes: "ene25", total: 7},
+    {palabra: "scjn", mes: "feb25", total: 7},
+    {palabra: "scjn", mes: "mar25", total: 6},
+    {palabra: "scjn", mes: "abr25", total: 18},
+    {palabra: "scjn", mes: "may25", total: 18},
+    {palabra: "scjn", mes: "jun25", total: 35},
+    {palabra: "scjn", mes: "jul25", total: 45},
+    {palabra: "scjn", mes: "ago25", total: 42},
+    {palabra: "scjn", mes: "sep25", total: 60},
+    {palabra: "scjn", mes: "oct25", total: 55},
+
+    {palabra: "supremacortejusticia", mes: "oct24", total: 6},
+    {palabra: "supremacortejusticia", mes: "nov24", total: 5},
+    {palabra: "supremacortejusticia", mes: "dic24", total: 3},
+    {palabra: "supremacortejusticia", mes: "ene25", total: 4},
+    {palabra: "supremacortejusticia", mes: "feb25", total: 7},
+    {palabra: "supremacortejusticia", mes: "mar25", total: 7},
+    {palabra: "supremacortejusticia", mes: "abr25", total: 4},
+    {palabra: "supremacortejusticia", mes: "may25", total: 6},
+    {palabra: "supremacortejusticia", mes: "jun25", total: 38},
+    {palabra: "supremacortejusticia", mes: "jul25", total: 22},
+    {palabra: "supremacortejusticia", mes: "ago25", total: 34},
+    {palabra: "supremacortejusticia", mes: "sep25", total: 50},
+    {palabra: "supremacortejusticia", mes: "oct25", total: 48},
+
+    {palabra: "reformajudicial", mes: "oct24", total: 20},
+    {palabra: "reformajudicial", mes: "nov24", total: 10},
+    {palabra: "reformajudicial", mes: "dic24", total: 2},
+    {palabra: "reformajudicial", mes: "ene25", total: 3},
+    {palabra: "reformajudicial", mes: "feb25", total: 7},
+    {palabra: "reformajudicial", mes: "mar25", total: 3},
+    {palabra: "reformajudicial", mes: "abr25", total: 12},
+    {palabra: "reformajudicial", mes: "may25", total: 8},
+    {palabra: "reformajudicial", mes: "jun25", total: 7},
+    {palabra: "reformajudicial", mes: "jul25", total: 20},
+    {palabra: "reformajudicial", mes: "ago25", total: 10},
+    {palabra: "reformajudicial", mes: "sep25", total: 12},
+    {palabra: "reformajudicial", mes: "oct25", total: 32},
+
+    {palabra: "magistrada", mes: "oct24", total: 8},
+    {palabra: "magistrada", mes: "nov24", total: 8},
+    {palabra: "magistrada", mes: "dic24", total: 5},
+    {palabra: "magistrada", mes: "ene25", total: 6},
+    {palabra: "magistrada", mes: "feb25", total: 5},
+    {palabra: "magistrada", mes: "mar25", total: 22},
+    {palabra: "magistrada", mes: "abr25", total: 58},
+    {palabra: "magistrada", mes: "may25", total: 42},
+    {palabra: "magistrada", mes: "jun25", total: 20},
+    {palabra: "magistrada", mes: "jul25", total: 8},
+    {palabra: "magistrada", mes: "ago25", total: 8},
+    {palabra: "magistrada", mes: "sep25", total: 38},
+    {palabra: "magistrada", mes: "oct25", total: 22},
+
+    {palabra: "jueza", mes: "oct24", total: 28},
+    {palabra: "jueza", mes: "nov24", total: 12},
+    {palabra: "jueza", mes: "dic24", total: 8},
+    {palabra: "jueza", mes: "ene25", total: 6},
+    {palabra: "jueza", mes: "feb25", total: 7},
+    {palabra: "jueza", mes: "mar25", total: 5},
+    {palabra: "jueza", mes: "abr25", total: 34},
+    {palabra: "jueza", mes: "may25", total: 12},
+    {palabra: "jueza", mes: "jun25", total: 8},
+    {palabra: "jueza", mes: "jul25", total: 36},
+    {palabra: "jueza", mes: "ago25", total: 20},
+    {palabra: "jueza", mes: "sep25", total: 30},
+    {palabra: "jueza", mes: "oct25", total: 38}
+  ];
+
+  const monthsOrder = ["oct24","nov24","dic24","ene25","feb25","mar25","abr25","may25","jun25","jul25","ago25","sep25","oct25"];
+
+  const chart = Plot.plot({
+    width: 760,
+    height: 520,
+    marginLeft: 170,
+    style: {
+      background: "none",
+      color: "#e5e7eb",
+      fontSize: "13px"
+    },
+    x: {label: "Mes", domain: monthsOrder, tickRotate: 0, tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    y: {label: "Palabra", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    color: {scheme: "reds", label: "Total"},
+    marks: [
+      Plot.cell(heatmapDatos, { x: "mes", y: "palabra", fill: "total", inset: 1 }),
+      Plot.ruleX([0])
+    ]
+  });
+
+  chartContainer.append(chart);
+}
 
 function activarEscena(index) {
   pasos.forEach((paso, i) => paso.classList.toggle("activo", i === index));
