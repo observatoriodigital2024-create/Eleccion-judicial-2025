@@ -575,8 +575,7 @@ const escenas2 = [
   {id: "temas-juridicos", etiqueta: "2", titulo: "Los temas jurídicos más sólidos"},
   {id: "tecnico-politico", etiqueta: "3", titulo: "Entre lo técnico y lo político"},
   {id: "diferencias-genero", etiqueta: "4", titulo: "Diferencias discursivas por género"},
-  {id: "palabras-dominantes", etiqueta: "5", titulo: "Las palabras que dominaron el discurso"},
-  {id: "intencionalidad-discursiva", etiqueta: "6", titulo: "Propuestas e intencionalidad discursiva"}
+  {id: "palabras-dominantes", etiqueta: "5", titulo: "Las palabras que dominaron el discurso"}
 ];
 
 const datos2 = {
@@ -836,128 +835,6 @@ function graficoGenero() {
   chartContainer2.append(svg.node());
 }
 
-function graficoRedIntencionalidad() {
-  limpiarGrafico2();
-
-  const width = 650;
-  const height = 420;
-  const nodes = [
-    {id: "Derechos humanos", group: "propuesta", frecuencia: 99},
-    {id: "Perspectiva de género", group: "propuesta", frecuencia: 43},
-    {id: "Acceso a la justicia", group: "propuesta", frecuencia: 18},
-    {id: "Transparencia", group: "propuesta", frecuencia: 13},
-    {id: "Capacitación", group: "propuesta", frecuencia: 12},
-    {id: "Base humanista", group: "contexto"},
-    {id: "Igualdad institucional", group: "contexto"},
-    {id: "Víctimas y grupos vulnerables", group: "contexto"},
-    {id: "Rendición de cuentas", group: "contexto"},
-    {id: "Operadores judiciales", group: "contexto"},
-    {id: "Sensibilidad social", group: "intencion"},
-    {id: "Criterios de igualdad", group: "intencion"},
-    {id: "Justicia inclusiva", group: "intencion"},
-    {id: "Honestidad pública", group: "intencion"},
-    {id: "Reforma interna", group: "intencion"}
-  ];
-
-  const links = [
-    {source: "Derechos humanos", target: "Base humanista"},
-    {source: "Base humanista", target: "Sensibilidad social"},
-    {source: "Perspectiva de género", target: "Igualdad institucional"},
-    {source: "Igualdad institucional", target: "Criterios de igualdad"},
-    {source: "Acceso a la justicia", target: "Víctimas y grupos vulnerables"},
-    {source: "Víctimas y grupos vulnerables", target: "Justicia inclusiva"},
-    {source: "Transparencia", target: "Rendición de cuentas"},
-    {source: "Rendición de cuentas", target: "Honestidad pública"},
-    {source: "Capacitación", target: "Operadores judiciales"},
-    {source: "Operadores judiciales", target: "Reforma interna"}
-  ];
-
-  const colorScale = d3.scaleOrdinal()
-    .domain(["propuesta", "contexto", "intencion"])
-    .range(["#1b75bb", "#652d90", "#22c55e"]);
-
-  const radius = d => d.group === "propuesta" ? Math.sqrt(d.frecuencia || 12) * 4 + 8 : 22;
-
-  const svg = d3.create("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("viewBox", [0, 0, width, height])
-    .style("background", "none");
-
-  const link = svg.append("g")
-    .attr("stroke", "rgba(255,255,255,0.18)")
-    .attr("stroke-width", 1.5)
-    .selectAll("line")
-    .data(links)
-    .join("line");
-
-  const node = svg.append("g")
-    .selectAll("g")
-    .data(nodes)
-    .join("g")
-    .call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended));
-
-  node.append("circle")
-    .attr("r", d => radius(d))
-    .attr("fill", d => colorScale(d.group))
-    .attr("stroke", "rgba(255,255,255,0.22)")
-    .attr("stroke-width", 2);
-
-  node.append("text")
-    .attr("class", "network-label")
-    .attr("text-anchor", "middle")
-    .attr("dy", d => d.group === "propuesta" ? 4 : 4)
-    .attr("font-size", d => d.group === "propuesta" ? "11px" : "10px")
-    .attr("font-weight", d => d.group === "propuesta" ? 700 : 500)
-    .attr("fill", "#fff")
-    .style("pointer-events", "none")
-    .text(d => d.id);
-
-  const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.source.group === "contexto" && d.target.group === "intencion" ? 140 : 120))
-    .force("charge", d3.forceManyBody().strength(-240))
-    .force("center", d3.forceCenter(width / 2, height / 2))
-    .force("x", d3.forceX(d => {
-      if (d.group === "propuesta") return width * 0.18;
-      if (d.group === "contexto") return width * 0.52;
-      return width * 0.84;
-    }).strength(0.12))
-    .force("y", d3.forceY(height / 2).strength(0.08))
-    .force("collide", d3.forceCollide(d => radius(d) + 6));
-
-  simulation.on("tick", () => {
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
-
-    node.attr("transform", d => `translate(${Math.max(40, Math.min(width - 40, d.x))},${Math.max(40, Math.min(height - 40, d.y))})`);
-  });
-
-  function dragstarted(event, d) {
-    if (!event.active) simulation.alphaTarget(0.3).restart();
-    d.fx = d.x;
-    d.fy = d.y;
-  }
-
-  function dragged(event, d) {
-    d.fx = event.x;
-    d.fy = event.y;
-  }
-
-  function dragended(event, d) {
-    if (!event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
-  }
-
-  chartContainer2.append(svg.node());
-}
-
 function graficoPalabras() {
   limpiarGrafico2();
   
@@ -1015,8 +892,7 @@ const funcionesGraficos2 = [
   graficoTemasJuridicos,
   graficoTecnicoPolitico,
   graficoGenero,
-  graficoPalabras,
-  graficoRedIntencionalidad
+  graficoPalabras
 ];
 
 function activarEscena2(index) {
