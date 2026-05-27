@@ -874,7 +874,7 @@ function graficoRedIntencionalidad() {
 
   const colorScale = d3.scaleOrdinal()
     .domain(["propuesta", "contexto", "intencion"])
-    .range(["#1b75bb", "#652d90", "#22c55e"]);
+    .range(["#1b75bb", "#652d90", "#fbbf24"]);
 
   const radius = d => d.group === "propuesta" ? Math.sqrt(d.frecuencia || 12) * 4 + 8 : 22;
 
