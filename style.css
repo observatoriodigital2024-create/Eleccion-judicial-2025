@@ -22,7 +22,7 @@ body {
   margin: 0;
   background: var(--fondo);
   color: var(--texto);
-  font-family: "Montserrat", Arial, sans-serif;
+  font-family: "Montserrat", Montserrat, semibold;
   font-weight: 600;
   line-height: 1.55;
 }
@@ -61,7 +61,7 @@ p {
 }
 
 .capa-1 {
-  color: #652d90;
+  color: #1c1855;
   --movimiento: 0;
 }
 
@@ -102,7 +102,7 @@ p {
 h1 {
   max-width: 980px;
   margin-top: 1rem;
-  font-family: Georgia, "Montserrat", serif;
+  font-family: Montserrat, "Montserrat", semibold;
   font-size: clamp(3.25rem, 8vw, 7.6rem);
   line-height: 0.95;
   letter-spacing: 0;
@@ -205,7 +205,7 @@ h1 {
 .rotulo strong {
   display: block;
   margin-top: 0.35rem;
-  font-family: Georgia, "Montserrat", serif;
+  font-family: Montserrat, "Montserrat", semibold;
   font-size: 1.5rem;
   line-height: 1.1;
   color: #fff;
@@ -234,7 +234,7 @@ h1 {
 .paso h2,
 .cierre h2 {
   margin-top: 0.75rem;
-  font-family: Georgia, "Montserrat", serif;
+  font-family: Montserrat, "Montserrat", semibold;
   font-size: clamp(2.1rem, 4vw, 4.2rem);
   line-height: 1;
   letter-spacing: 0;
@@ -361,7 +361,7 @@ h1 {
 }
 
 .intro-capitulo h2 {
-  font-family: Georgia, "Montserrat", serif;
+  font-family: Montserrat, "Montserrat", semibold;
   font-size: clamp(2rem, 4vw, 3.5rem);
   line-height: 1.1;
   margin-top: 0;
@@ -439,7 +439,7 @@ h1 {
 
 .paso-secundario h2 {
   margin-top: 0.75rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Montserrat, "Montserrat", semibold;
   font-size: clamp(2.1rem, 4vw, 4.2rem);
   line-height: 1;
   letter-spacing: 0;
