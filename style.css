@@ -85,6 +85,31 @@ p {
   z-index: 1;
 }
 
+.logo {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.logo img {
+  width: 140px;
+  height: auto;
+  display: block;
+}
+
+.logo-svg {
+  width: 140px;
+  height: auto;
+  display: block;
+}
+
+.logo-mark { fill: var(--morado); }
+.logo-symbol { fill: #fff; }
+.logo-text { fill: var(--texto); }
+
+@media (max-width: 640px) {
+  .logo img, .logo-svg { width: 110px; }
+}
+
 .etiqueta,
 .meta {
   color: var(--muted);
