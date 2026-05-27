@@ -405,7 +405,7 @@ const datos2 = {
     {tema: "Opiniones y percepciones generales", lda: 4.76, nmf: 21.43}
   ],
   nivel: [
-    {nivel: "Técnico-normativo", porcentaje: 42.86},
+    {nivel: "Técnico-normativo", porcentaje: 62.86},
     {nivel: "Sistémico-político", porcentaje: 42.86}
   ],
   genero: {

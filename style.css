@@ -73,7 +73,7 @@ p {
 }
 
 .capa-3 {
-  color: #0c4a6e;
+  color:  #1b75bb;
   bottom: -16vh;
   height: 68vh;
   --movimiento: 8vh;
@@ -102,7 +102,7 @@ p {
 h1 {
   max-width: 980px;
   margin-top: 1rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, "Montserrat", serif;
   font-size: clamp(3.25rem, 8vw, 7.6rem);
   line-height: 0.95;
   letter-spacing: 0;
@@ -205,7 +205,7 @@ h1 {
 .rotulo strong {
   display: block;
   margin-top: 0.35rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, "Montserrat", serif;
   font-size: 1.5rem;
   line-height: 1.1;
   color: #fff;
@@ -234,7 +234,7 @@ h1 {
 .paso h2,
 .cierre h2 {
   margin-top: 0.75rem;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, "Montserrat", serif;
   font-size: clamp(2.1rem, 4vw, 4.2rem);
   line-height: 1;
   letter-spacing: 0;
@@ -361,7 +361,7 @@ h1 {
 }
 
 .intro-capitulo h2 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, "Montserrat", serif;
   font-size: clamp(2rem, 4vw, 3.5rem);
   line-height: 1.1;
   margin-top: 0;
