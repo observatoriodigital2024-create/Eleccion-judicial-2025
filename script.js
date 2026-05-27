@@ -9,11 +9,11 @@ const rotuloTitulo = document.querySelector("#rotulo-titulo");
 const chartContainer = document.querySelector("#observableChart");
 
 const escenas = [
-  {id: "tiktok-justicia", etiqueta: "Escena 1", titulo: "La justicia entra a TikTok"},
-  {id: "acordeon", etiqueta: "Escena 2", titulo: "El auge del acordeón"},
-  {id: "dominancia", etiqueta: "Escena 3", titulo: "Quién domina la conversación"},
-  {id: "red-narrativas", etiqueta: "Escena 4", titulo: "Red de usuarios y narrativas"},
-  {id: "emociones", etiqueta: "Escena 5", titulo: "La disputa emocional"}
+  {id: "tiktok-justicia", etiqueta: "1", titulo: "La justicia entra a TikTok"},
+  {id: "acordeon", etiqueta: "2", titulo: "El auge del acordeón"},
+  {id: "dominancia", etiqueta: "3", titulo: "Quién domina la conversación"},
+  {id: "red-narrativas", etiqueta: "4", titulo: "Red de usuarios y narrativas"},
+  {id: "emociones", etiqueta: "5", titulo: "La disputa emocional"}
 ];
 
 const datos = {
@@ -386,11 +386,11 @@ const rotuloTitulo2 = document.querySelector("#rotulo-titulo-2");
 const chartContainer2 = document.querySelector("#observableChart2");
 
 const escenas2 = [
-  {id: "vinculantes", etiqueta: "Escena 1", titulo: "Propuestas vinculantes vs. narrativas de campaña"},
-  {id: "temas-juridicos", etiqueta: "Escena 2", titulo: "Los temas jurídicos más sólidos"},
-  {id: "tecnico-politico", etiqueta: "Escena 3", titulo: "Entre lo técnico y lo político"},
-  {id: "diferencias-genero", etiqueta: "Escena 4", titulo: "Diferencias discursivas por género"},
-  {id: "palabras-dominantes", etiqueta: "Escena 5", titulo: "Las palabras que dominaron el discurso"}
+  {id: "vinculantes", etiqueta: "1", titulo: "Propuestas vinculantes vs. narrativas de campaña"},
+  {id: "temas-juridicos", etiqueta: "2", titulo: "Los temas jurídicos más sólidos"},
+  {id: "tecnico-politico", etiqueta: "3", titulo: "Entre lo técnico y lo político"},
+  {id: "diferencias-genero", etiqueta: "4", titulo: "Diferencias discursivas por género"},
+  {id: "palabras-dominantes", etiqueta: "5", titulo: "Las palabras que dominaron el discurso"}
 ];
 
 const datos2 = {
