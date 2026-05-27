@@ -683,36 +683,78 @@ function graficoVinculantes() {
   chartContainer2.append(chart);
 }
 
-function graficoTemasJuridicos() {
+function graficoLDANMF() {
   limpiarGrafico2();
+
+  const datos = [
+    {tema: "Derechos constitucionales e igualdad", modelo: "LDA", valor: 21.43},
+    {tema: "Derechos constitucionales e igualdad", modelo: "NMF", valor: 4.76},
+
+    {tema: "Mecanismos legales y juicios de amparo", modelo: "LDA", valor: 21.43},
+    {tema: "Mecanismos legales y juicios de amparo", modelo: "NMF", valor: 9.52},
+
+    {tema: "Justicia comunitaria y cooperación internacional", modelo: "LDA", valor: 16.67},
+    {tema: "Justicia comunitaria y cooperación internacional", modelo: "NMF", valor: 11.90},
+
+    {tema: "Cumplimiento normativo y reparación del daño", modelo: "LDA", valor: 11.90},
+    {tema: "Cumplimiento normativo y reparación del daño", modelo: "NMF", valor: 16.67},
+
+    {tema: "Sistema judicial y Federación", modelo: "LDA", valor: 9.52},
+    {tema: "Sistema judicial y Federación", modelo: "NMF", valor: 21.43},
+
+    {tema: "Perspectiva de género en impartición de justicia", modelo: "LDA", valor: 9.52},
+    {tema: "Perspectiva de género en impartición de justicia", modelo: "NMF", valor: 9.52},
+
+    {tema: "Opiniones y percepciones generales", modelo: "LDA", valor: 4.76},
+    {tema: "Opiniones y percepciones generales", modelo: "NMF", valor: 21.43},
+
+    {tema: "Inclusión, género y discapacidad", modelo: "LDA", valor: 4.76},
+    {tema: "Inclusión, género y discapacidad", modelo: "NMF", valor: 4.76}
+  ];
+
   const chart = Plot.plot({
-    width: 650,
-    height: 420,
+    width: 820,
+    height: 560,
     marginLeft: 260,
+    marginBottom: 50,
     style: {
-      background: "none",
+      background: "transparent",
       color: "#e5e7eb",
-      fontSize: "12px"
+      fontSize: "13px"
     },
-    x: {grid: true, label: "Peso (%)", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    y: {label: null, tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    x: {
+      grid: true,
+      label: "Porcentaje (%)",
+      percent: false
+    },
+    y: {
+      label: null
+    },
+    color: {
+      legend: true,
+      domain: ["LDA", "NMF"],
+      range: ["#ef4444", "#3b82f6"]
+    },
     marks: [
-      Plot.barX(datos2.temas, {
+      Plot.barX(datos, {
         y: "tema",
-        x: "lda",
-        fill: "#1b75bb",
-        sort: {y: "x", reverse: true},
-        title: "LDA"
+        x: "valor",
+        fill: "modelo",
+        fx: "modelo"
       }),
-      Plot.barX(datos2.temas, {
+      Plot.text(datos, {
         y: "tema",
-        x: d => -d.nmf,
-        fill: "#652d90",
-        title: "NMF"
+        x: "valor",
+        fx: "modelo",
+        text: d => `${d.valor}%`,
+        dx: 18,
+        fill: "#f8fafc",
+        fontSize: 11
       }),
       Plot.ruleX([0])
     ]
   });
+
   chartContainer2.append(chart);
 }
 
@@ -1019,7 +1061,7 @@ function graficoRedIntencionalidad() {
 
 const funcionesGraficos2 = [
   graficoVinculantes,
-  graficoTemasJuridicos,
+  graficoLDANMF,
   graficoTecnicoPolitico,
   graficoGenero,
   graficoPalabras,
