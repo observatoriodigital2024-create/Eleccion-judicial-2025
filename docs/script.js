@@ -836,6 +836,58 @@ function graficoGenero() {
   chartContainer2.append(svg.node());
 }
 
+function graficoPalabras() {
+  limpiarGrafico2();
+  
+  const width = 650;
+  const height = 420;
+  
+  // Crear un array único por visualización
+  const datosPalabras = datos2.palabras;
+  
+  // Calcular posiciones circulares
+  const root = d3.pack()
+    .size([width, height])
+    .padding(8)(d3.hierarchy({children: datosPalabras}).sum(d => d.frecuencia));
+  
+  const svg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [0, 0, width, height])
+    .style("background", "none");
+  
+  const colorScale = d3.scaleOrdinal()
+    .domain(datosPalabras.map(d => d.palabra))
+    .range(["#1b75bb", "#652d90", "#ec4899", "#fbbf24", "#1b75bb"]);
+  
+  const leaf = svg.selectAll("g")
+    .data(root.leaves())
+    .join("g")
+    .attr("transform", d => `translate(${d.x},${d.y})`);
+  
+  leaf.append("circle")
+    .attr("r", d => d.r)
+    .attr("fill", d => colorScale(d.data.palabra))
+    .attr("opacity", 0.88)
+    .attr("stroke", "rgba(255,255,255,0.18)")
+    .attr("stroke-width", 2);
+  
+  leaf.append("text")
+    .attr("class", "network-label")
+    .attr("text-anchor", "middle")
+    .attr("dy", d => d.r / 5)
+    .selectAll("tspan")
+    .data(d => d.data.palabra.split(/\s+/))
+    .join("tspan")
+    .attr("x", 0)
+    .attr("dy", (word, i) => i === 0 ? 0 : "1.1em")
+    .attr("font-size", d => "10px")
+    .text(d => d)
+    .attr("fill", "#fff");
+  
+  chartContainer2.append(svg.node());
+}
+
 function graficoRedIntencionalidad() {
   limpiarGrafico2();
 
@@ -955,58 +1007,6 @@ function graficoRedIntencionalidad() {
     d.fy = null;
   }
 
-  chartContainer2.append(svg.node());
-}
-
-function graficoPalabras() {
-  limpiarGrafico2();
-  
-  const width = 650;
-  const height = 420;
-  
-  // Crear un array único por visualización
-  const datosPalabras = datos2.palabras;
-  
-  // Calcular posiciones circulares
-  const root = d3.pack()
-    .size([width, height])
-    .padding(8)(d3.hierarchy({children: datosPalabras}).sum(d => d.frecuencia));
-  
-  const svg = d3.create("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("viewBox", [0, 0, width, height])
-    .style("background", "none");
-  
-  const colorScale = d3.scaleOrdinal()
-    .domain(datosPalabras.map(d => d.palabra))
-    .range(["#1b75bb", "#652d90", "#ec4899", "#fbbf24", "#1b75bb"]);
-  
-  const leaf = svg.selectAll("g")
-    .data(root.leaves())
-    .join("g")
-    .attr("transform", d => `translate(${d.x},${d.y})`);
-  
-  leaf.append("circle")
-    .attr("r", d => d.r)
-    .attr("fill", d => colorScale(d.data.palabra))
-    .attr("opacity", 0.88)
-    .attr("stroke", "rgba(255,255,255,0.18)")
-    .attr("stroke-width", 2);
-  
-  leaf.append("text")
-    .attr("class", "network-label")
-    .attr("text-anchor", "middle")
-    .attr("dy", d => d.r / 5)
-    .selectAll("tspan")
-    .data(d => d.data.palabra.split(/\s+/))
-    .join("tspan")
-    .attr("x", 0)
-    .attr("dy", (word, i) => i === 0 ? 0 : "1.1em")
-    .attr("font-size", d => "10px")
-    .text(d => d)
-    .attr("fill", "#fff");
-  
   chartContainer2.append(svg.node());
 }
 
