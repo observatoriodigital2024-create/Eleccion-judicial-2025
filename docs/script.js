@@ -35,7 +35,6 @@ const datos = {
     {usuario: "@lexconsulto", publicaciones: 59},
     {usuario: "@latinus_us", publicaciones: 16},
     {usuario: "@politicomx", publicaciones: 15},
-    {usuario: "@lexconsultonoticias", publicaciones: 14},
     {usuario: "@aztecanoticias", publicaciones: 11}
   ],
   red: {
@@ -86,7 +85,7 @@ function graficoTikTok() {
       color: "#e5e7eb",
       fontSize: "14px"
     },
-    x: {label: "Período", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    x: {domain: ["Antes", "Durante", "Después"], label: "Período", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     y: {grid: true, label: "Publicaciones", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     marks: [
       Plot.barY(datos.tiktok, {
@@ -111,7 +110,7 @@ function graficoAcordeon() {
       color: "#e5e7eb",
       fontSize: "14px"
     },
-    x: {label: "Mes", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    x: {domain: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"], label: "Mes", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     y: {grid: true, label: "Menciones", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     marks: [
       Plot.areaY(datos.acordeon, {
@@ -206,24 +205,28 @@ function graficoRed() {
     .attr("viewBox", [0, 0, width, height])
     .style("background", "none");
   
-  // Preparar los datos
   const nodes = datos.red.nodes.map(d => ({...d}));
   const links = datos.red.links.map(d => ({...d}));
   
-  // Crear simulación física
-  const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(80))
-    .force("charge", d3.forceManyBody().strength(-300))
-    .force("center", d3.forceCenter(width / 2, height / 2));
+  const color = d => d.grupo === "hashtag" ? "#ec4899" : "#1b75bb";
+  const radius = d => Math.max(10, Math.sqrt(d.size) * 2.8);
   
-  // Dibujar enlaces
+  const simulation = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.source.grupo === "usuario" && d.target.grupo === "hashtag" ? 120 : 90))
+    .force("charge", d3.forceManyBody().strength(-260))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("x", d3.forceX(d => d.grupo === "hashtag" ? width * 0.72 : width * 0.28).strength(0.08))
+    .force("y", d3.forceY(height / 2).strength(0.04))
+    .force("collide", d3.forceCollide(d => radius(d) + 8));
+  
   const link = svg.append("g")
+    .attr("stroke", "rgba(255,255,255,0.22)")
+    .attr("stroke-width", 1.2)
+    .attr("opacity", 0.8)
     .selectAll("line")
     .data(links)
-    .join("line")
-    .attr("class", "network-link");
+    .join("line");
   
-  // Dibujar nodos
   const node = svg.append("g")
     .selectAll("g")
     .data(nodes)
@@ -235,15 +238,20 @@ function graficoRed() {
       .on("end", dragended));
   
   node.append("circle")
-    .attr("r", d => Math.sqrt(d.size) * 2.5)
-    .attr("fill", d => d.grupo === "hashtag" ? "#ec4899" : "#1b75bb");
+    .attr("r", d => radius(d))
+    .attr("fill", d => color(d))
+    .attr("stroke", "rgba(255,255,255,0.24)")
+    .attr("stroke-width", 2);
   
   node.append("text")
     .attr("class", "network-label")
     .attr("text-anchor", "middle")
+    .attr("dy", d => d.grupo === "hashtag" ? 4 : 4)
+    .attr("font-size", "10px")
+    .attr("fill", "#fff")
+    .attr("pointer-events", "none")
     .text(d => d.id.replace("@", "").replace("#", ""));
   
-  // Actualizar posiciones en cada tick
   simulation.on("tick", () => {
     link
       .attr("x1", d => d.source.x)
@@ -251,10 +259,9 @@ function graficoRed() {
       .attr("x2", d => d.target.x)
       .attr("y2", d => d.target.y);
     
-    node.attr("transform", d => `translate(${d.x},${d.y})`);
+    node.attr("transform", d => `translate(${Math.max(32, Math.min(width - 32, d.x))},${Math.max(32, Math.min(height - 32, d.y))})`);
   });
   
-  // Funciones de arrastre
   function dragstarted(event, d) {
     if (!event.active) simulation.alphaTarget(0.3).restart();
     d.fx = d.x;
@@ -303,7 +310,7 @@ function graficoEmociones() {
       color: "#e5e7eb",
       fontSize: "13px"
     },
-    x: {label: "Período", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    x: {domain: ["Antes", "Durante", "Después"], label: "Período", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     y: {grid: true, label: "Menciones", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     marks: [
       Plot.areaY(datos.emociones.filter(d => d.emotion === "Alegría"), {
@@ -479,7 +486,7 @@ function graficoHeatmapPalabras() {
     {palabra: "jueza", mes: "oct25", total: 38}
   ];
 
-  const monthsOrder = ["oct24","nov24","dic24","ene25","feb25","mar25","abr25","may25","jun25","jul25","ago25","sep25","oct25"];
+  const monthsOrder = ["ene25","feb25","mar25","abr25","may25","jun25"];
 
   const chart = Plot.plot({
     width: 760,
@@ -492,7 +499,7 @@ function graficoHeatmapPalabras() {
     },
     x: {label: "Mes", domain: monthsOrder, tickRotate: 0, tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     y: {label: "Palabra", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    color: {range: ["#ec4899", "#652d90", "#1b75bb"], label: "Total"},
+    color: {range: ["#fce7f8", "#f472b6", "#db2777"], label: "Total"},
     marks: [
       Plot.cell(heatmapDatos, { x: "mes", y: "palabra", fill: "total", inset: 1 }),
       // labels inside cells
@@ -581,7 +588,7 @@ const escenas2 = [
 
 const datos2 = {
   vinculantes: [
-    {tipo: "Vinculantes", porcentaje: 60},
+    {tipo: "Propuestas reales", porcentaje: 60},
     {tipo: "No vinculantes", porcentaje: 40}
   ],
   temas: [
@@ -681,7 +688,7 @@ function graficoTemasJuridicos() {
   const chart = Plot.plot({
     width: 650,
     height: 420,
-    marginLeft: 180,
+    marginLeft: 260,
     style: {
       background: "none",
       color: "#e5e7eb",
