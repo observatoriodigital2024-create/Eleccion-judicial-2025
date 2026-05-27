@@ -76,6 +76,13 @@ function limpiarGrafico() {
 
 function graficoTikTok() {
   limpiarGrafico();
+  // calcular picos por emoción
+  const emociones = datos.emociones;
+  const picoAlegriaVal = d3.max(emociones.filter(d => d.emotion === "Alegría"), d => d.value);
+  const picoEnojoVal = d3.max(emociones.filter(d => d.emotion === "Enojo"), d => d.value);
+  const picoAlegria = emociones.find(d => d.emotion === "Alegría" && d.value === picoAlegriaVal) || null;
+  const picoEnojo = emociones.find(d => d.emotion === "Enojo" && d.value === picoEnojoVal) || null;
+
   const chart = Plot.plot({
     width: 650,
     height: 420,
@@ -276,18 +283,40 @@ function graficoRed() {
 
 function graficoEmociones() {
   limpiarGrafico();
+
+  // Crear leyenda simple
+  const legend = document.createElement('div');
+  legend.className = 'chart-legend';
+  legend.innerHTML = `
+    <span class="legend-item"><i style="background:#1b75bb"></i>Alegría</span>
+    <span class="legend-item"><i style="background:#ec4899"></i>Enojo</span>
+  `;
+  chartContainer.appendChild(legend);
+
   const chart = Plot.plot({
-    width: 650,
-    height: 420,
-    marginLeft: 70,
+    width: 760,
+    height: 520,
+    marginLeft: 170,
     style: {
       background: "none",
       color: "#e5e7eb",
-      fontSize: "14px"
+      fontSize: "13px"
     },
     x: {label: "Período", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     y: {grid: true, label: "Menciones", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     marks: [
+      Plot.areaY(datos.emociones.filter(d => d.emotion === "Alegría"), {
+        x: "periodo",
+        y: "value",
+        fill: "#1b75bb",
+        fillOpacity: 0.12
+      }),
+      Plot.areaY(datos.emociones.filter(d => d.emotion === "Enojo"), {
+        x: "periodo",
+        y: "value",
+        fill: "#ec4899",
+        fillOpacity: 0.12
+      }),
       Plot.lineY(datos.emociones.filter(d => d.emotion === "Alegría"), {
         x: "periodo",
         y: "value",
@@ -314,8 +343,13 @@ function graficoEmociones() {
         fill: "#ec4899",
         r: 5
       })
+      ,
+      // picos anotados
+      ...(picoAlegria ? [Plot.dot([picoAlegria], { x: "periodo", y: "value", fill: "#1b75bb", r: 8, stroke: "#ffffff", strokeWidth: 1.5 }), Plot.text([picoAlegria], { x: "periodo", y: "value", text: d => d.value, dy: -14, fill: "#1b75bb", fontSize: 12 })] : []),
+      ...(picoEnojo ? [Plot.dot([picoEnojo], { x: "periodo", y: "value", fill: "#ec4899", r: 8, stroke: "#ffffff", strokeWidth: 1.5 }), Plot.text([picoEnojo], { x: "periodo", y: "value", text: d => d.value, dy: -14, fill: "#ec4899", fontSize: 12 })] : [])
     ]
   });
+
   chartContainer.append(chart);
 }
 
@@ -457,9 +491,18 @@ function graficoHeatmapPalabras() {
     },
     x: {label: "Mes", domain: monthsOrder, tickRotate: 0, tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
     y: {label: "Palabra", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    color: {scheme: "reds", label: "Total"},
+    color: {range: ["#ec4899", "#652d90", "#1b75bb"], label: "Total"},
     marks: [
       Plot.cell(heatmapDatos, { x: "mes", y: "palabra", fill: "total", inset: 1 }),
+      // labels inside cells
+      Plot.text(heatmapDatos, {
+        x: "mes",
+        y: "palabra",
+        text: d => d.total,
+        fill: d => d.total > (d3.max(heatmapDatos, h => h.total) * 0.5) ? "#ffffff" : "#e5e7eb",
+        fontSize: 10,
+        dy: "0.35em"
+      }),
       Plot.ruleX([0])
     ]
   });

@@ -110,6 +110,27 @@ p {
   .logo img, .logo-svg { width: 110px; }
 }
 
+/* Legend for charts */
+.chart-legend {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+  color: var(--texto);
+  font-size: 13px;
+}
+.chart-legend .legend-item {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+.chart-legend .legend-item i {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
 .etiqueta,
 .meta {
   color: var(--muted);
