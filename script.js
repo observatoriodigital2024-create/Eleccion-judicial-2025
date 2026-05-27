@@ -90,7 +90,7 @@ function graficoTikTok() {
       Plot.barY(datos.tiktok, {
         x: "periodo",
         y: "publicaciones",
-        fill: "#06b6d4"
+        fill: "#1b75bb"
       }),
       Plot.ruleY([0])
     ]
@@ -116,13 +116,13 @@ function graficoAcordeon() {
         x: "mes",
         y: "menciones",
         fill: "url(#gradient)",
-        stroke: "#8b5cf6",
+        stroke: "#652d90",
         strokeWidth: 2
       }),
       Plot.dot(datos.acordeon, {
         x: "mes",
         y: "menciones",
-        fill: "#8b5cf6",
+        fill: "#652d90",
         r: 4
       })
     ]
@@ -144,12 +144,12 @@ function graficoAcordeon() {
     
     const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
     stop1.setAttribute("offset", "0%");
-    stop1.setAttribute("stop-color", "#8b5cf6");
+    stop1.setAttribute("stop-color", "#652d90");
     stop1.setAttribute("stop-opacity", "0.4");
     
     const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
     stop2.setAttribute("offset", "100%");
-    stop2.setAttribute("stop-color", "#8b5cf6");
+    stop2.setAttribute("stop-color", "#652d90");
     stop2.setAttribute("stop-opacity", "0.02");
     
     gradient.appendChild(stop1);
@@ -177,7 +177,7 @@ function graficoDominancia() {
       Plot.barX(datos.usuarios, {
         y: "usuario",
         x: "publicaciones",
-        fill: "#3b82f6",
+        fill: "#1b75bb",
         sort: {y: "x", reverse: true}
       }),
       Plot.text(datos.usuarios, {
@@ -234,7 +234,7 @@ function graficoRed() {
   
   node.append("circle")
     .attr("r", d => Math.sqrt(d.size) * 2.5)
-    .attr("fill", d => d.grupo === "hashtag" ? "#ec4899" : "#06b6d4");
+    .attr("fill", d => d.grupo === "hashtag" ? "#ec4899" : "#1b75bb");
   
   node.append("text")
     .attr("class", "network-label")
@@ -290,7 +290,7 @@ function graficoEmociones() {
       Plot.lineY(datos.emociones.filter(d => d.emotion === "Alegría"), {
         x: "periodo",
         y: "value",
-        stroke: "#06b6d4",
+        stroke: "#1b75bb",
         strokeWidth: 3,
         title: "Alegría"
       }),
@@ -304,7 +304,7 @@ function graficoEmociones() {
       Plot.dot(datos.emociones.filter(d => d.emotion === "Alegría"), {
         x: "periodo",
         y: "value",
-        fill: "#06b6d4",
+        fill: "#1b75bb",
         r: 5
       }),
       Plot.dot(datos.emociones.filter(d => d.emotion === "Enojo"), {
@@ -475,7 +475,7 @@ function graficoVinculantes() {
       Plot.barY(datos2.vinculantes, {
         x: "tipo",
         y: "porcentaje",
-        fill: d => d.tipo === "Vinculantes" ? "#06b6d4" : "#ec4899"
+        fill: d => d.tipo === "Vinculantes" ? "#1b75bb" : "#ec4899"
       }),
       Plot.text(datos2.vinculantes, {
         x: "tipo",
@@ -507,14 +507,14 @@ function graficoTemasJuridicos() {
       Plot.barX(datos2.temas, {
         y: "tema",
         x: "lda",
-        fill: "#06b6d4",
+        fill: "#1b75bb",
         sort: {y: "x", reverse: true},
         title: "LDA"
       }),
       Plot.barX(datos2.temas, {
         y: "tema",
         x: d => -d.nmf,
-        fill: "#8b5cf6",
+        fill: "#652d90",
         title: "NMF"
       }),
       Plot.ruleX([0])
@@ -540,7 +540,7 @@ function graficoTecnicoPolitico() {
       Plot.barX(datos2.nivel, {
         y: "nivel",
         x: "porcentaje",
-        fill: "#06b6d4"
+        fill: "#1b75bb"
       }),
       Plot.text(datos2.nivel, {
         y: "nivel",
@@ -570,16 +570,24 @@ function graficoGenero() {
   const links = datos2.genero.links.map(d => ({...d}));
   
   const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.source.grupo === "centro" ? 60 : 100))
-    .force("charge", d3.forceManyBody().strength(-250))
-    .force("center", d3.forceCenter(width / 2, height / 2));
+    .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.source.grupo === "centro" || d.target.grupo === "centro" ? 90 : 130))
+    .force("charge", d3.forceManyBody().strength(-260))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("x", d3.forceX(d => {
+      if (d.grupo === "mujeres") return width * 0.28;
+      if (d.grupo === "hombres") return width * 0.72;
+      return width * 0.5;
+    }).strength(0.08))
+    .force("y", d3.forceY(height / 2).strength(0.04))
+    .force("collide", d3.forceCollide(d => d.grupo === "centro" ? 24 : Math.sqrt(d.size) * 3 + 8));
   
   const link = svg.append("g")
+    .attr("opacity", 0.22)
     .selectAll("line")
     .data(links)
     .join("line")
     .attr("class", "network-link")
-    .attr("stroke-width", 1.5);
+    .attr("stroke-width", 1.8);
   
   const node = svg.append("g")
     .selectAll("g")
@@ -593,20 +601,24 @@ function graficoGenero() {
   
   node.append("circle")
     .attr("r", d => {
-      if (d.grupo === "centro") return 12;
-      return Math.sqrt(d.size) * 2;
+      if (d.grupo === "centro") return 18;
+      return Math.sqrt(d.size) * 3.5;
     })
     .attr("fill", d => {
       if (d.grupo === "centro") return "#fbbf24";
       if (d.grupo === "mujeres") return "#ec4899";
-      return "#3b82f6";
-    });
+      return "#1b75bb";
+    })
+    .attr("stroke", "rgba(255,255,255,0.18)")
+    .attr("stroke-width", 2);
   
   node.append("text")
     .attr("class", "network-label")
-    .attr("font-size", d => d.grupo === "centro" ? "11px" : "10px")
-    .attr("font-weight", d => d.grupo === "centro" ? "bold" : "normal")
-    .text(d => d.id);
+    .attr("font-size", d => d.grupo === "centro" ? "12px" : "11px")
+    .attr("font-weight", d => d.grupo === "centro" ? "700" : "500")
+    .attr("dy", d => d.grupo === "centro" ? 4 : 4)
+    .text(d => d.id)
+    .style("pointer-events", "none");
   
   simulation.on("tick", () => {
     link
@@ -615,7 +627,7 @@ function graficoGenero() {
       .attr("x2", d => d.target.x)
       .attr("y2", d => d.target.y);
     
-    node.attr("transform", d => `translate(${d.x},${d.y})`);
+    node.attr("transform", d => `translate(${Math.max(40, Math.min(width - 40, d.x))},${Math.max(40, Math.min(height - 40, d.y))})`);
   });
   
   function dragstarted(event, d) {
@@ -648,21 +660,9 @@ function graficoPalabras() {
   const datosPalabras = datos2.palabras;
   
   // Calcular posiciones circulares
-  const numPalabras = datosPalabras.length;
-  const radiusScale = d3.scaleLinear()
-    .domain([0, d3.max(datosPalabras, d => d.frecuencia)])
-    .range([10, 80]);
-  
-  const posiciones = datosPalabras.map((d, i) => {
-    const angle = (i / numPalabras) * Math.PI * 2;
-    const radius = radiusScale(d.frecuencia);
-    return {
-      ...d,
-      x: width / 2 + radius * Math.cos(angle),
-      y: height / 2 + radius * Math.sin(angle),
-      r: Math.sqrt(d.frecuencia) * 3
-    };
-  });
+  const root = d3.pack()
+    .size([width, height])
+    .padding(8)(d3.hierarchy({children: datosPalabras}).sum(d => d.frecuencia));
   
   const svg = d3.create("svg")
     .attr("width", width)
@@ -670,28 +670,33 @@ function graficoPalabras() {
     .attr("viewBox", [0, 0, width, height])
     .style("background", "none");
   
-  svg.selectAll("circle")
-    .data(posiciones)
-    .join("circle")
-    .attr("cx", d => d.x)
-    .attr("cy", d => d.y)
-    .attr("r", d => d.r)
-    .attr("fill", (d, i) => {
-      const colores = ["#06b6d4", "#8b5cf6", "#ec4899", "#fbbf24", "#3b82f6"];
-      return colores[i % colores.length];
-    })
-    .attr("opacity", 0.7);
+  const colorScale = d3.scaleOrdinal()
+    .domain(datosPalabras.map(d => d.palabra))
+    .range(["#1b75bb", "#652d90", "#ec4899", "#fbbf24", "#1b75bb"]);
   
-  svg.selectAll("text")
-    .data(posiciones)
-    .join("text")
-    .attr("x", d => d.x)
-    .attr("y", d => d.y)
+  const leaf = svg.selectAll("g")
+    .data(root.leaves())
+    .join("g")
+    .attr("transform", d => `translate(${d.x},${d.y})`);
+  
+  leaf.append("circle")
+    .attr("r", d => d.r)
+    .attr("fill", d => colorScale(d.data.palabra))
+    .attr("opacity", 0.88)
+    .attr("stroke", "rgba(255,255,255,0.18)")
+    .attr("stroke-width", 2);
+  
+  leaf.append("text")
     .attr("class", "network-label")
-    .attr("font-size", d => Math.min(d.r / 2, 14) + "px")
     .attr("text-anchor", "middle")
-    .attr("dominant-baseline", "middle")
-    .text(d => d.palabra)
+    .attr("dy", d => d.r / 5)
+    .selectAll("tspan")
+    .data(d => d.data.palabra.split(/\s+/))
+    .join("tspan")
+    .attr("x", 0)
+    .attr("dy", (word, i) => i === 0 ? 0 : "1.1em")
+    .attr("font-size", d => "10px")
+    .text(d => d)
     .attr("fill", "#fff");
   
   chartContainer2.append(svg.node());
