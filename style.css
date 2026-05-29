@@ -110,6 +110,12 @@ p {
   .logo img, .logo-svg { width: 110px; }
 }
 
+.hero-img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
 /* Legend for charts */
 .chart-legend {
   display: flex;
