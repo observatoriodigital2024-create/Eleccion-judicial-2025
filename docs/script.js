@@ -95,31 +95,32 @@ function galeriaLego() {
 
   const cards = [
     {
-      img: "assets/img/slopaganda-lego-1.jpg",
+      img: "assets/trump-meme-cover.avif",
       titulo: "Líder caricaturizado",
       emocion: "Burla",
       funcion: "Ridiculizar al adversario"
     },
     {
-      img: "assets/img/slopaganda-lego-2.jpg",
+      img: "assets/iran-flag-lego.jpg",
       titulo: "Conflicto como juego",
       emocion: "Sorpresa",
       funcion: "Suavizar la violencia"
     },
     {
-      img: "assets/img/slopaganda-lego-3.jpg",
+      img: "assets/red-bottom.jpeg",
       titulo: "Escena bélica infantilizada",
       emocion: "Risa",
       funcion: "Hacer compartible el conflicto"
     },
     {
-      img: "assets/img/slopaganda-lego-4.jpg",
+      img: "assets/trump-lego.jpeg",
       titulo: "Propaganda visual",
       emocion: "Indignación",
       funcion: "Simplificar una narrativa"
     }
   ];
 
+  
   const wrapper = document.createElement("div");
   wrapper.className = "lego-gallery";
   wrapper.style.display = "grid";
@@ -182,7 +183,7 @@ function graficoEmociones() {
       Plot.barX(datos, {
         y: "emocion",
         x: "valor",
-        fill: "#f97316",
+        fill: "#f916ee",
         sort: { y: "x", reverse: true }
       }),
       Plot.text(datos, {
