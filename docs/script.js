@@ -2,514 +2,196 @@ import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot/+esm";
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 const pasos = Array.from(document.querySelectorAll(".paso"));
-const relato = document.querySelector(".relato");
 const barraProgreso = document.querySelector("#barra-progreso");
 const rotuloEtapa = document.querySelector("#rotulo-etapa");
 const rotuloTitulo = document.querySelector("#rotulo-titulo");
-const chartContainer = document.querySelector("#observableChart");
 
-const escenas = [
-  {id: "tiktok-justicia", etiqueta: "1", titulo: "La justicia entra a TikTok"},
-  {id: "acordeon", etiqueta: "2", titulo: "El auge del acordeón"},
-  {id: "dominancia", etiqueta: "3", titulo: "Quién domina la conversación"},
-  {id: "red-narrativas", etiqueta: "4", titulo: "Red de usuarios y narrativas"},
-  {id: "palabras-clave", etiqueta: "5", titulo: "La conversación cambia de palabras clave"},
-  {id: "emociones", etiqueta: "6", titulo: "La disputa emocional"}
+const chartContainer =
+  document.querySelector("#visual") ||
+  document.querySelector("#observableChart");
+
+const titulos = [
+  "De la propaganda al meme",
+  "La estética tipo Lego",
+  "La lógica emocional",
+  "La lógica algorítmica",
+  "La red de distribución",
+  "El mapa de la disputa narrativa",
+  "Cuando el meme no parece falso"
 ];
-
-const datos = {
-  tiktok: [
-    {periodo: "Antes", publicaciones: 65},
-    {periodo: "Durante", publicaciones: 12},
-    {periodo: "Después", publicaciones: 115}
-  ],
-  acordeon: [
-    {mes: "Ene", menciones: 0},
-    {mes: "Feb", menciones: 0},
-    {mes: "Mar", menciones: 5},
-    {mes: "Abr", menciones: 15},
-    {mes: "May", menciones: 60},
-    {mes: "Jun", menciones: 100}
-  ],
-  usuarios: [
-    {usuario: "@lexconsulto", publicaciones: 59},
-    {usuario: "@latinus_us", publicaciones: 16},
-    {usuario: "@politicomx", publicaciones: 15},
-    {usuario: "@aztecanoticias", publicaciones: 11}
-  ],
-  red: {
-    nodes: [
-      {id: "@lexconsulto", grupo: "usuario", size: 59},
-      {id: "@politicomx", grupo: "usuario", size: 15},
-      {id: "@latinus_us", grupo: "usuario", size: 16},
-      {id: "@aztecanoticias", grupo: "usuario", size: 11},
-      {id: "#acordeon", grupo: "hashtag", size: 40},
-      {id: "#reformajudicial", grupo: "hashtag", size: 30},
-      {id: "#scjn", grupo: "hashtag", size: 22},
-      {id: "#eleccionjudicial", grupo: "hashtag", size: 25}
-    ],
-    links: [
-      {source: "@lexconsulto", target: "#acordeon"},
-      {source: "@lexconsulto", target: "#reformajudicial"},
-      {source: "@lexconsulto", target: "#scjn"},
-      {source: "@politicomx", target: "#eleccionjudicial"},
-      {source: "@politicomx", target: "#reformajudicial"},
-      {source: "@latinus_us", target: "#acordeon"},
-      {source: "@aztecanoticias", target: "#scjn"}
-    ]
-  },
-  emociones: [
-    {periodo: "Antes", emotion: "Alegría", value: 42},
-    {periodo: "Antes", emotion: "Enojo", value: 8},
-    {periodo: "Durante", emotion: "Alegría", value: 35},
-    {periodo: "Durante", emotion: "Enojo", value: 10},
-    {periodo: "Después", emotion: "Alegría", value: 18},
-    {periodo: "Después", emotion: "Enojo", value: 17}
-  ]
-};
 
 function limpiarGrafico() {
   if (!chartContainer) return;
   chartContainer.innerHTML = "";
 }
 
-function graficoTikTok() {
+function graficoTimeline() {
   limpiarGrafico();
 
+  const timeline = [
+    { año: 1940, etapa: "Propaganda estatal clásica", nivel: 1 },
+    { año: 2000, etapa: "Propaganda digital", nivel: 1 },
+    { año: 2016, etapa: "Memes políticos electorales", nivel: 1 },
+    { año: 2024, etapa: "IA generativa", nivel: 1 },
+    { año: 2025, etapa: "Slopaganda bélica", nivel: 1 }
+  ];
+
   const chart = Plot.plot({
-    width: 650,
-    height: 420,
-    marginLeft: 70,
+    width: 850,
+    height: 380,
+    marginLeft: 50,
+    marginRight: 50,
+    marginTop: 80,
+    marginBottom: 120,
     style: {
-      background: "none",
+      background: "transparent",
       color: "#e5e7eb",
       fontSize: "14px"
     },
-    x: {domain: ["Antes", "Durante", "Después"], label: "Período", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    y: {grid: true, label: "Publicaciones", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    marks: [
-      Plot.barY(datos.tiktok, {
-        x: "periodo",
-        y: "publicaciones",
-        fill: "#1b75bb"
-      }),
-      Plot.ruleY([0])
-    ]
-  });
-  chartContainer.append(chart);
-}
-
-function graficoAcordeon() {
-  limpiarGrafico();
-  const chart = Plot.plot({
-    width: 650,
-    height: 420,
-    marginLeft: 70,
-    style: {
-      background: "none",
-      color: "#e5e7eb",
-      fontSize: "14px"
+    x: {
+      label: "Año",
+      domain: [1935, 2028],
+      ticks: [1940, 2000, 2016, 2024, 2025],
+      grid: true
     },
-    x: {domain: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"], label: "Mes", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    y: {grid: true, label: "Menciones", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
+    y: {
+      domain: [0, 2],
+      axis: null
+    },
     marks: [
-      Plot.areaY(datos.acordeon, {
-        x: "mes",
-        y: "menciones",
-        fill: "url(#gradient)",
-        stroke: "#652d90",
+      Plot.ruleY([1], { stroke: "#64748b", strokeWidth: 3 }),
+      Plot.dot(timeline, {
+        x: "año",
+        y: "nivel",
+        r: 10,
+        fill: "#38bdf8",
+        stroke: "white",
         strokeWidth: 2
       }),
-      Plot.dot(datos.acordeon, {
-        x: "mes",
-        y: "menciones",
-        fill: "#652d90",
-        r: 4
-      })
-    ]
-  });
-  
-  // Agregar gradiente al SVG
-  const svg = chart.querySelector("svg");
-  if (svg) {
-    const defs = svg.querySelector("defs") || svg.insertBefore(
-      document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-      svg.firstChild
-    );
-    const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
-    gradient.setAttribute("id", "gradient");
-    gradient.setAttribute("x1", "0%");
-    gradient.setAttribute("y1", "0%");
-    gradient.setAttribute("x2", "0%");
-    gradient.setAttribute("y2", "100%");
-    
-    const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
-    stop1.setAttribute("offset", "0%");
-    stop1.setAttribute("stop-color", "#652d90");
-    stop1.setAttribute("stop-opacity", "0.4");
-    
-    const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
-    stop2.setAttribute("offset", "100%");
-    stop2.setAttribute("stop-color", "#652d90");
-    stop2.setAttribute("stop-opacity", "0.02");
-    
-    gradient.appendChild(stop1);
-    gradient.appendChild(stop2);
-    defs.appendChild(gradient);
-  }
-  
-  chartContainer.append(chart);
-}
-
-function graficoDominancia() {
-  limpiarGrafico();
-  const chart = Plot.plot({
-    width: 650,
-    height: 420,
-    marginLeft: 180,
-    style: {
-      background: "none",
-      color: "#e5e7eb",
-      fontSize: "14px"
-    },
-    x: {grid: true, label: "Publicaciones", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    y: {label: null, tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    marks: [
-      Plot.barX(datos.usuarios, {
-        y: "usuario",
-        x: "publicaciones",
-        fill: "#1b75bb",
-        sort: {y: "x", reverse: true}
+      Plot.text(timeline, {
+        x: "año",
+        y: "nivel",
+        text: d => d.año,
+        dy: -30,
+        fill: "white",
+        fontWeight: "bold"
       }),
-      Plot.text(datos.usuarios, {
-        y: "usuario",
-        x: "publicaciones",
-        text: d => `${d.publicaciones}`,
-        dx: 8,
-        fill: "#cbd5e1"
+      Plot.text(timeline, {
+        x: "año",
+        y: "nivel",
+        text: "etapa",
+        dy: 38,
+        fill: "#cbd5e1",
+        lineWidth: 12
       })
     ]
   });
+
   chartContainer.append(chart);
 }
 
-function graficoRed() {
+function galeriaLego() {
   limpiarGrafico();
+
+  const cards = [
+    {
+      img: "assets/trump-meme-cover.avif",
+      titulo: "Líder caricaturizado",
+      emocion: "Burla",
+      funcion: "Ridiculizar al adversario"
+    },
+    {
+      img: "assets/iran-flag-lego.jpg",
+      titulo: "Conflicto como juego",
+      emocion: "Sorpresa",
+      funcion: "Suavizar la violencia"
+    },
+    {
+      img: "assets/red-bottom.jpeg",
+      titulo: "Escena bélica infantilizada",
+      emocion: "Risa",
+      funcion: "Hacer compartible el conflicto"
+    },
+    {
+      img: "assets/trump-lego.jpeg",
+      titulo: "Propaganda visual",
+      emocion: "Indignación",
+      funcion: "Simplificar una narrativa"
+    }
+  ];
+
   
-  const width = 650;
-  const height = 420;
-  
-  const svg = d3.create("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("viewBox", [0, 0, width, height])
-    .style("background", "none");
-  
-  const nodes = datos.red.nodes.map(d => ({...d}));
-  const links = datos.red.links.map(d => ({...d}));
-  
-  const color = d => d.grupo === "hashtag" ? "#ec4899" : "#1b75bb";
-  const radius = d => Math.max(10, Math.sqrt(d.size) * 2.8);
-  
-  const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(d => d.source.grupo === "usuario" && d.target.grupo === "hashtag" ? 120 : 90))
-    .force("charge", d3.forceManyBody().strength(-260))
-    .force("center", d3.forceCenter(width / 2, height / 2))
-    .force("x", d3.forceX(d => d.grupo === "hashtag" ? width * 0.72 : width * 0.28).strength(0.08))
-    .force("y", d3.forceY(height / 2).strength(0.04))
-    .force("collide", d3.forceCollide(d => radius(d) + 8));
-  
-  const link = svg.append("g")
-    .attr("stroke", "rgba(255,255,255,0.22)")
-    .attr("stroke-width", 1.2)
-    .attr("opacity", 0.8)
-    .selectAll("line")
-    .data(links)
-    .join("line");
-  
-  const node = svg.append("g")
-    .selectAll("g")
-    .data(nodes)
-    .join("g")
-    .attr("class", "network-node")
-    .call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended));
-  
-  node.append("circle")
-    .attr("r", d => radius(d))
-    .attr("fill", d => color(d))
-    .attr("stroke", "rgba(255,255,255,0.24)")
-    .attr("stroke-width", 2);
-  
-  node.append("text")
-    .attr("class", "network-label")
-    .attr("text-anchor", "middle")
-    .attr("dy", d => d.grupo === "hashtag" ? 4 : 4)
-    .attr("font-size", "10px")
-    .attr("fill", "#fff")
-    .attr("pointer-events", "none")
-    .text(d => d.id.replace("@", "").replace("#", ""));
-  
-  simulation.on("tick", () => {
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
-    
-    node.attr("transform", d => `translate(${Math.max(32, Math.min(width - 32, d.x))},${Math.max(32, Math.min(height - 32, d.y))})`);
+  const wrapper = document.createElement("div");
+  wrapper.className = "lego-gallery";
+  wrapper.style.display = "grid";
+  wrapper.style.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
+  wrapper.style.gap = "1rem";
+  wrapper.style.width = "100%";
+
+  cards.forEach(card => {
+    const div = document.createElement("div");
+    div.className = "lego-card";
+    div.style.background = "rgba(255,255,255,0.08)";
+    div.style.border = "1px solid rgba(255,255,255,0.15)";
+    div.style.borderRadius = "20px";
+    div.style.overflow = "hidden";
+    div.style.boxShadow = "0 20px 50px rgba(0,0,0,0.25)";
+
+    div.innerHTML = `
+      <img src="${card.img}" alt="${card.titulo}" style="width:100%; height:180px; object-fit:cover;">
+      <div style="padding:1rem;">
+        <h3 style="margin:0 0 .5rem; color:#f8fafc;">${card.titulo}</h3>
+        <p style="margin:.25rem 0; color:#38bdf8;"><strong>Emoción:</strong> ${card.emocion}</p>
+        <p style="margin:.25rem 0; color:#cbd5e1;"><strong>Función:</strong> ${card.funcion}</p>
+      </div>
+    `;
+
+    wrapper.append(div);
   });
-  
-  function dragstarted(event, d) {
-    if (!event.active) simulation.alphaTarget(0.3).restart();
-    d.fx = d.x;
-    d.fy = d.y;
-  }
-  
-  function dragged(event, d) {
-    d.fx = event.x;
-    d.fy = event.y;
-  }
-  
-  function dragended(event, d) {
-    if (!event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
-  }
-  
-  chartContainer.append(svg.node());
+
+  chartContainer.append(wrapper);
 }
 
 function graficoEmociones() {
   limpiarGrafico();
 
-  // calcular picos por emoción
-  const emociones = datos.emociones;
-  const picoAlegriaVal = d3.max(emociones.filter(d => d.emotion === "Alegría"), d => d.value);
-  const picoEnojoVal = d3.max(emociones.filter(d => d.emotion === "Enojo"), d => d.value);
-  const picoAlegria = emociones.find(d => d.emotion === "Alegría" && d.value === picoAlegriaVal) || null;
-  const picoEnojo = emociones.find(d => d.emotion === "Enojo" && d.value === picoEnojoVal) || null;
-
-  // Crear leyenda simple
-  const legend = document.createElement('div');
-  legend.className = 'chart-legend';
-  legend.innerHTML = `
-    <span class="legend-item"><i style="background:#1b75bb"></i>Alegría</span>
-    <span class="legend-item"><i style="background:#ec4899"></i>Enojo</span>
-  `;
-  chartContainer.appendChild(legend);
-
-  const chart = Plot.plot({
-    width: 760,
-    height: 520,
-    marginLeft: 170,
-    style: {
-      background: "none",
-      color: "#e5e7eb",
-      fontSize: "13px"
-    },
-    x: {domain: ["Antes", "Durante", "Después"], label: "Período", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    y: {grid: true, label: "Menciones", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    marks: [
-      Plot.areaY(datos.emociones.filter(d => d.emotion === "Alegría"), {
-        x: "periodo",
-        y: "value",
-        fill: "#1b75bb",
-        fillOpacity: 0.12
-      }),
-      Plot.areaY(datos.emociones.filter(d => d.emotion === "Enojo"), {
-        x: "periodo",
-        y: "value",
-        fill: "#ec4899",
-        fillOpacity: 0.12
-      }),
-      Plot.lineY(datos.emociones.filter(d => d.emotion === "Alegría"), {
-        x: "periodo",
-        y: "value",
-        stroke: "#1b75bb",
-        strokeWidth: 3,
-        title: "Alegría"
-      }),
-      Plot.lineY(datos.emociones.filter(d => d.emotion === "Enojo"), {
-        x: "periodo",
-        y: "value",
-        stroke: "#ec4899",
-        strokeWidth: 3,
-        title: "Enojo"
-      }),
-      Plot.dot(datos.emociones.filter(d => d.emotion === "Alegría"), {
-        x: "periodo",
-        y: "value",
-        fill: "#1b75bb",
-        r: 5
-      }),
-      Plot.dot(datos.emociones.filter(d => d.emotion === "Enojo"), {
-        x: "periodo",
-        y: "value",
-        fill: "#ec4899",
-        r: 5
-      })
-      ,
-      // picos anotados
-      ...(picoAlegria ? [Plot.dot([picoAlegria], { x: "periodo", y: "value", fill: "#1b75bb", r: 8, stroke: "#ffffff", strokeWidth: 1.5 }), Plot.text([picoAlegria], { x: "periodo", y: "value", text: d => d.value, dy: -14, fill: "#1b75bb", fontSize: 12 })] : []),
-      ...(picoEnojo ? [Plot.dot([picoEnojo], { x: "periodo", y: "value", fill: "#ec4899", r: 8, stroke: "#ffffff", strokeWidth: 1.5 }), Plot.text([picoEnojo], { x: "periodo", y: "value", text: d => d.value, dy: -14, fill: "#ec4899", fontSize: 12 })] : [])
-    ]
-  });
-
-  chartContainer.append(chart);
-}
-
-const funcionesGraficos = [
-  graficoTikTok,
-  graficoAcordeon,
-  graficoDominancia,
-  graficoRed,
-  graficoHeatmapPalabras,
-  graficoEmociones
-];
-
-function graficoHeatmapPalabras() {
-  limpiarGrafico();
-  const heatmapDatos = [
-    {palabra: "#eleccionesjudiciales", mes: "oct24", total: 5},
-    {palabra: "#eleccionesjudiciales", mes: "nov24", total: 4},
-    {palabra: "#eleccionesjudiciales", mes: "dic24", total: 4},
-    {palabra: "#eleccionesjudiciales", mes: "ene25", total: 5},
-    {palabra: "#eleccionesjudiciales", mes: "feb25", total: 8},
-    {palabra: "#eleccionesjudiciales", mes: "mar25", total: 28},
-    {palabra: "#eleccionesjudiciales", mes: "abr25", total: 42},
-    {palabra: "#eleccionesjudiciales", mes: "may25", total: 58},
-    {palabra: "#eleccionesjudiciales", mes: "jun25", total: 65},
-    {palabra: "#eleccionesjudiciales", mes: "jul25", total: 24},
-    {palabra: "#eleccionesjudiciales", mes: "ago25", total: 9},
-    {palabra: "#eleccionesjudiciales", mes: "sep25", total: 8},
-    {palabra: "#eleccionesjudiciales", mes: "oct25", total: 7},
-
-    {palabra: "#eleccionjudicial", mes: "oct24", total: 6},
-    {palabra: "#eleccionjudicial", mes: "nov24", total: 5},
-    {palabra: "#eleccionjudicial", mes: "dic24", total: 4},
-    {palabra: "#eleccionjudicial", mes: "ene25", total: 6},
-    {palabra: "#eleccionjudicial", mes: "feb25", total: 10},
-    {palabra: "#eleccionjudicial", mes: "mar25", total: 30},
-    {palabra: "#eleccionjudicial", mes: "abr25", total: 44},
-    {palabra: "#eleccionjudicial", mes: "may25", total: 55},
-    {palabra: "#eleccionjudicial", mes: "jun25", total: 68},
-    {palabra: "#eleccionjudicial", mes: "jul25", total: 25},
-    {palabra: "#eleccionjudicial", mes: "ago25", total: 9},
-    {palabra: "#eleccionjudicial", mes: "sep25", total: 10},
-    {palabra: "#eleccionjudicial", mes: "oct25", total: 8},
-
-    {palabra: "#acordeon elecciones", mes: "oct24", total: 0},
-    {palabra: "#acordeon elecciones", mes: "nov24", total: 0},
-    {palabra: "#acordeon elecciones", mes: "dic24", total: 0},
-    {palabra: "#acordeon elecciones", mes: "ene25", total: 0},
-    {palabra: "#acordeon elecciones", mes: "feb25", total: 0},
-    {palabra: "#acordeon elecciones", mes: "mar25", total: 0},
-    {palabra: "#acordeon elecciones", mes: "abr25", total: 0},
-    {palabra: "#acordeon elecciones", mes: "may25", total: 68},
-    {palabra: "#acordeon elecciones", mes: "jun25", total: 62},
-    {palabra: "#acordeon elecciones", mes: "jul25", total: 42},
-    {palabra: "#acordeon elecciones", mes: "ago25", total: 18},
-    {palabra: "#acordeon elecciones", mes: "sep25", total: 5},
-    {palabra: "#acordeon elecciones", mes: "oct25", total: 4},
-
-    {palabra: "scjn", mes: "oct24", total: 4},
-    {palabra: "scjn", mes: "nov24", total: 7},
-    {palabra: "scjn", mes: "dic24", total: 3},
-    {palabra: "scjn", mes: "ene25", total: 7},
-    {palabra: "scjn", mes: "feb25", total: 7},
-    {palabra: "scjn", mes: "mar25", total: 6},
-    {palabra: "scjn", mes: "abr25", total: 18},
-    {palabra: "scjn", mes: "may25", total: 18},
-    {palabra: "scjn", mes: "jun25", total: 35},
-    {palabra: "scjn", mes: "jul25", total: 45},
-    {palabra: "scjn", mes: "ago25", total: 42},
-    {palabra: "scjn", mes: "sep25", total: 60},
-    {palabra: "scjn", mes: "oct25", total: 55},
-
-    {palabra: "supremacortejusticia", mes: "oct24", total: 6},
-    {palabra: "supremacortejusticia", mes: "nov24", total: 5},
-    {palabra: "supremacortejusticia", mes: "dic24", total: 3},
-    {palabra: "supremacortejusticia", mes: "ene25", total: 4},
-    {palabra: "supremacortejusticia", mes: "feb25", total: 7},
-    {palabra: "supremacortejusticia", mes: "mar25", total: 7},
-    {palabra: "supremacortejusticia", mes: "abr25", total: 4},
-    {palabra: "supremacortejusticia", mes: "may25", total: 6},
-    {palabra: "supremacortejusticia", mes: "jun25", total: 38},
-    {palabra: "supremacortejusticia", mes: "jul25", total: 22},
-    {palabra: "supremacortejusticia", mes: "ago25", total: 34},
-    {palabra: "supremacortejusticia", mes: "sep25", total: 50},
-    {palabra: "supremacortejusticia", mes: "oct25", total: 48},
-
-    {palabra: "reformajudicial", mes: "oct24", total: 20},
-    {palabra: "reformajudicial", mes: "nov24", total: 10},
-    {palabra: "reformajudicial", mes: "dic24", total: 2},
-    {palabra: "reformajudicial", mes: "ene25", total: 3},
-    {palabra: "reformajudicial", mes: "feb25", total: 7},
-    {palabra: "reformajudicial", mes: "mar25", total: 3},
-    {palabra: "reformajudicial", mes: "abr25", total: 12},
-    {palabra: "reformajudicial", mes: "may25", total: 8},
-    {palabra: "reformajudicial", mes: "jun25", total: 7},
-    {palabra: "reformajudicial", mes: "jul25", total: 20},
-    {palabra: "reformajudicial", mes: "ago25", total: 10},
-    {palabra: "reformajudicial", mes: "sep25", total: 12},
-    {palabra: "reformajudicial", mes: "oct25", total: 32},
-
-    {palabra: "magistrada", mes: "oct24", total: 8},
-    {palabra: "magistrada", mes: "nov24", total: 8},
-    {palabra: "magistrada", mes: "dic24", total: 5},
-    {palabra: "magistrada", mes: "ene25", total: 6},
-    {palabra: "magistrada", mes: "feb25", total: 5},
-    {palabra: "magistrada", mes: "mar25", total: 22},
-    {palabra: "magistrada", mes: "abr25", total: 58},
-    {palabra: "magistrada", mes: "may25", total: 42},
-    {palabra: "magistrada", mes: "jun25", total: 20},
-    {palabra: "magistrada", mes: "jul25", total: 8},
-    {palabra: "magistrada", mes: "ago25", total: 8},
-    {palabra: "magistrada", mes: "sep25", total: 38},
-    {palabra: "magistrada", mes: "oct25", total: 22},
-
-    {palabra: "jueza", mes: "oct24", total: 28},
-    {palabra: "jueza", mes: "nov24", total: 12},
-    {palabra: "jueza", mes: "dic24", total: 8},
-    {palabra: "jueza", mes: "ene25", total: 6},
-    {palabra: "jueza", mes: "feb25", total: 7},
-    {palabra: "jueza", mes: "mar25", total: 5},
-    {palabra: "jueza", mes: "abr25", total: 34},
-    {palabra: "jueza", mes: "may25", total: 12},
-    {palabra: "jueza", mes: "jun25", total: 8},
-    {palabra: "jueza", mes: "jul25", total: 36},
-    {palabra: "jueza", mes: "ago25", total: 20},
-    {palabra: "jueza", mes: "sep25", total: 30},
-    {palabra: "jueza", mes: "oct25", total: 38}
+  const datos = [
+    { emocion: "Risa", valor: 85 },
+    { emocion: "Burla", valor: 78 },
+    { emocion: "Indignación", valor: 70 },
+    { emocion: "Sorpresa", valor: 62 },
+    { emocion: "Miedo", valor: 45 }
   ];
 
-  const monthsOrder = ["ene25","feb25","mar25","abr25","may25","jun25"];
-
   const chart = Plot.plot({
-    width: 760,
-    height: 520,
-    marginLeft: 170,
+    width: 820,
+    height: 460,
+    marginLeft: 120,
     style: {
-      background: "none",
+      background: "transparent",
       color: "#e5e7eb",
-      fontSize: "13px"
+      fontSize: "14px"
     },
-    x: {label: "Mes", domain: monthsOrder, tickRotate: 0, tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    y: {label: "Palabra", tickColor: "#cbd5e1", labelColor: "#cbd5e1"},
-    color: {range: ["#fce7f8", "#f472b6", "#db2777"], label: "Total"},
+    x: {
+      grid: true,
+      label: "Intensidad emocional"
+    },
+    y: {
+      label: null
+    },
     marks: [
-      Plot.cell(heatmapDatos, { x: "mes", y: "palabra", fill: "total", inset: 1 }),
-      // labels inside cells
-      Plot.text(heatmapDatos, {
-        x: "mes",
-        y: "palabra",
-        text: d => d.total,
-        fill: d => d.total > (d3.max(heatmapDatos, h => h.total) * 0.5) ? "#ffffff" : "#e5e7eb",
-        fontSize: 10,
-        dy: "0.35em"
+      Plot.barX(datos, {
+        y: "emocion",
+        x: "valor",
+        fill: "#f916ee",
+        sort: { y: "x", reverse: true }
+      }),
+      Plot.text(datos, {
+        y: "emocion",
+        x: "valor",
+        text: d => d.valor,
+        dx: 18,
+        fill: "white"
       }),
       Plot.ruleX([0])
     ]
@@ -518,53 +200,336 @@ function graficoHeatmapPalabras() {
   chartContainer.append(chart);
 }
 
-function activarEscena(index) {
-  pasos.forEach((paso, i) => paso.classList.toggle("activo", i === index));
-  
-  const escena = escenas[index] || escenas[0];
-  rotuloEtapa.textContent = escena.etiqueta;
-  rotuloTitulo.textContent = escena.titulo;
-  barraProgreso.style.width = `${((index + 1) / pasos.length) * 100}%`;
-  
-  const funcion = funcionesGraficos[index] || funcionesGraficos[0];
-  funcion();
+function graficoAlgoritmico() {
+  limpiarGrafico();
+
+  const datos = [
+    { dia: "Día 1", vistas: 10000 },
+    { dia: "Día 2", vistas: 80000 },
+    { dia: "Día 3", vistas: 240000 },
+    { dia: "Día 4", vistas: 700000 },
+    { dia: "Día 5", vistas: 1500000 },
+    { dia: "Día 6", vistas: 3000000 },
+    { dia: "Día 7", vistas: 5200000 }
+  ];
+
+  const chart = Plot.plot({
+    width: 850,
+    height: 460,
+    marginLeft: 80,
+    marginBottom: 60,
+    style: {
+      background: "transparent",
+      color: "#e5e7eb",
+      fontSize: "14px"
+    },
+    x: {
+      label: "Tiempo"
+    },
+    y: {
+      grid: true,
+      label: "Vistas",
+      tickFormat: d => `${d / 1000000}M`
+    },
+    marks: [
+      Plot.areaY(datos, {
+        x: "dia",
+        y: "vistas",
+        fill: "#38bdf8",
+        fillOpacity: 0.18
+      }),
+      Plot.lineY(datos, {
+        x: "dia",
+        y: "vistas",
+        stroke: "#38bdf8",
+        strokeWidth: 4
+      }),
+      Plot.dot(datos, {
+        x: "dia",
+        y: "vistas",
+        r: 5,
+        fill: "white"
+      })
+    ]
+  });
+
+  chartContainer.append(chart);
 }
 
-function actualizarProgreso() {
-  if (!relato) return;
-  
-  const inicio = relato.offsetTop;
-  const final = relato.offsetTop + relato.offsetHeight - window.innerHeight;
-  if (final <= inicio) return;
-  
-  const avance = (window.scrollY - inicio) / (final - inicio);
-  const porcentaje = Math.min(100, Math.max(0, avance * 100));
-  barraProgreso.style.width = `${porcentaje}%`;
+function graficoRedDistribucion() {
+  limpiarGrafico();
+
+  const width = 850;
+  const height = 560;
+
+  const nodes = [
+    { id: "Cuenta oficial", grupo: "actor", size: 24 },
+    { id: "Cuenta creadora", grupo: "actor", size: 30 },
+    { id: "Medio afín", grupo: "actor", size: 22 },
+    { id: "Influencer político", grupo: "actor", size: 24 },
+    { id: "Audiencia internacional", grupo: "audiencia", size: 34 },
+    { id: "#slopaganda", grupo: "hashtag", size: 25 },
+    { id: "#memewar", grupo: "hashtag", size: 22 },
+    { id: "#AIpropaganda", grupo: "hashtag", size: 22 },
+    { id: "#tipoLego", grupo: "hashtag", size: 24 },
+    { id: "Cultura pop", grupo: "narrativa", size: 26 },
+    { id: "Humor político", grupo: "narrativa", size: 28 },
+    { id: "Guerra", grupo: "narrativa", size: 26 }
+  ];
+
+  const links = [
+    { source: "Cuenta oficial", target: "Cuenta creadora" },
+    { source: "Cuenta creadora", target: "#tipoLego" },
+    { source: "Cuenta creadora", target: "Humor político" },
+    { source: "Medio afín", target: "#AIpropaganda" },
+    { source: "Influencer político", target: "Audiencia internacional" },
+    { source: "#slopaganda", target: "Cultura pop" },
+    { source: "#memewar", target: "Guerra" },
+    { source: "Humor político", target: "Audiencia internacional" },
+    { source: "Cultura pop", target: "Audiencia internacional" }
+  ];
+
+  const color = d3.scaleOrdinal()
+    .domain(["actor", "hashtag", "narrativa", "audiencia"])
+    .range(["#38bdf8", "#a78bfa", "#f97316", "#22c55e"]);
+
+  const svg = d3.create("svg")
+    .attr("viewBox", [0, 0, width, height])
+    .style("width", "100%")
+    .style("height", "100%")
+    .style("background", "transparent");
+
+  const simulation = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(130))
+    .force("charge", d3.forceManyBody().strength(-420))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("collision", d3.forceCollide().radius(d => d.size + 20));
+
+  const link = svg.append("g")
+    .selectAll("line")
+    .data(links)
+    .join("line")
+    .attr("stroke", "rgba(255,255,255,0.25)")
+    .attr("stroke-width", 2);
+
+  const node = svg.append("g")
+    .selectAll("circle")
+    .data(nodes)
+    .join("circle")
+    .attr("r", d => d.size)
+    .attr("fill", d => color(d.grupo))
+    .attr("stroke", "rgba(255,255,255,0.65)")
+    .attr("stroke-width", 1.5)
+    .call(drag(simulation));
+
+  const label = svg.append("g")
+    .selectAll("text")
+    .data(nodes)
+    .join("text")
+    .text(d => d.id)
+    .attr("fill", "#f8fafc")
+    .attr("font-size", 12)
+    .attr("text-anchor", "middle")
+    .attr("dy", d => d.size + 16);
+
+  simulation.on("tick", () => {
+    link
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+
+    node
+      .attr("cx", d => d.x)
+      .attr("cy", d => d.y);
+
+    label
+      .attr("x", d => d.x)
+      .attr("y", d => d.y);
+  });
+
+  chartContainer.append(svg.node());
+}
+
+function mapaDisputaNarrativa() {
+  limpiarGrafico();
+
+  const pasos = [
+    { etapa: "Producción propagandística", x: 1, y: 1 },
+    { etapa: "IA generativa", x: 2, y: 1 },
+    { etapa: "Redes sociales", x: 3, y: 1 },
+    { etapa: "Audiencias globales", x: 4, y: 1 },
+    { etapa: "Reacción emocional", x: 5, y: 1 }
+  ];
+
+  const chart = Plot.plot({
+    width: 850,
+    height: 350,
+    marginLeft: 40,
+    marginRight: 40,
+    marginTop: 80,
+    marginBottom: 100,
+    style: {
+      background: "transparent",
+      color: "#e5e7eb",
+      fontSize: "14px"
+    },
+    x: {
+      domain: [0.5, 5.5],
+      axis: null
+    },
+    y: {
+      domain: [0.5, 1.5],
+      axis: null
+    },
+    marks: [
+      Plot.line(pasos, {
+        x: "x",
+        y: "y",
+        stroke: "#64748b",
+        strokeWidth: 4
+      }),
+      Plot.dot(pasos, {
+        x: "x",
+        y: "y",
+        r: 18,
+        fill: "#a78bfa",
+        stroke: "white",
+        strokeWidth: 2
+      }),
+      Plot.text(pasos, {
+        x: "x",
+        y: "y",
+        text: "etapa",
+        dy: 48,
+        fill: "#e5e7eb",
+        lineWidth: 12
+      })
+    ]
+  });
+
+  chartContainer.append(chart);
+}
+
+function matrizRiesgo() {
+  limpiarGrafico();
+
+  const datos = [
+    { pieza: "Meme satírico", dato: 25, emocion: 85 },
+    { pieza: "Video falso", dato: 85, emocion: 90 },
+    { pieza: "Parodia musical", dato: 30, emocion: 60 },
+    { pieza: "Noticia falsa", dato: 90, emocion: 82 },
+    { pieza: "Caricatura política", dato: 20, emocion: 65 }
+  ];
+
+  const chart = Plot.plot({
+    width: 820,
+    height: 520,
+    marginLeft: 70,
+    marginBottom: 70,
+    style: {
+      background: "transparent",
+      color: "#e5e7eb",
+      fontSize: "14px"
+    },
+    x: {
+      label: "Dato verificable",
+      domain: [0, 100],
+      grid: true
+    },
+    y: {
+      label: "Impacto emocional",
+      domain: [0, 100],
+      grid: true
+    },
+    marks: [
+      Plot.ruleX([50], { stroke: "#64748b", strokeDasharray: "4 4" }),
+      Plot.ruleY([50], { stroke: "#64748b", strokeDasharray: "4 4" }),
+      Plot.dot(datos, {
+        x: "dato",
+        y: "emocion",
+        r: 9,
+        fill: "#ef4444",
+        stroke: "white",
+        strokeWidth: 1.5
+      }),
+      Plot.text(datos, {
+        x: "dato",
+        y: "emocion",
+        text: "pieza",
+        dy: -14,
+        fill: "#f8fafc",
+        lineWidth: 10
+      })
+    ]
+  });
+
+  chartContainer.append(chart);
+}
+
+function drag(simulation) {
+  return d3.drag()
+    .on("start", (event, d) => {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    })
+    .on("drag", (event, d) => {
+      d.fx = event.x;
+      d.fy = event.y;
+    })
+    .on("end", (event, d) => {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    });
+}
+
+const graficos = [
+  graficoTimeline,
+  galeriaLego,
+  graficoEmociones,
+  graficoAlgoritmico,
+  graficoRedDistribucion,
+  mapaDisputaNarrativa,
+  matrizRiesgo
+];
+
+let escenaActual = -1;
+
+function activarEscena(index) {
+  if (index === escenaActual || !graficos[index]) return;
+
+  escenaActual = index;
+
+  pasos.forEach(paso => paso.classList.remove("activo"));
+  pasos[index].classList.add("activo");
+
+  if (rotuloEtapa) rotuloEtapa.textContent = `Escena ${index + 1}`;
+  if (rotuloTitulo) rotuloTitulo.textContent = titulos[index];
+
+  if (barraProgreso) {
+    barraProgreso.style.width = `${((index + 1) / pasos.length) * 100}%`;
+  }
+
+  graficos[index]();
 }
 
 const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
+  entries => {
+    entries.forEach(entry => {
       if (entry.isIntersecting) {
         const index = pasos.indexOf(entry.target);
-        if (index >= 0) {
-          activarEscena(index);
-        }
+        activarEscena(index);
       }
     });
   },
-  {
-    root: null,
-    threshold: 0.55
-  }
+  { threshold: 0.55 }
 );
 
-pasos.forEach((paso) => observer.observe(paso));
-window.addEventListener("scroll", actualizarProgreso, { passive: true });
-window.addEventListener("resize", actualizarProgreso);
+pasos.forEach(paso => observer.observe(paso));
 
 activarEscena(0);
-actualizarProgreso();
 
 /* ============================================================
    SEGUNDA SECCIÓN: PROPUESTAS Y NARRATIVAS
@@ -1071,3 +1036,4 @@ pasos2.forEach((paso) => observer2.observe(paso));
 window.addEventListener("scroll", actualizarProgreso2, { passive: true });
 
 activarEscena2(0);
+graficoTimeline();
