@@ -343,16 +343,9 @@ h1 {
   }
 }
 
-#visual {
-  width: 100%;
-  min-height: 380px;
-  display: grid;
-  place-items: center;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 24px;
-  padding: 2rem;
-}
+
+
+
 
 /* Estilos para D3 */
 #d3-network {
@@ -531,4 +524,34 @@ h1 {
   .paso-secundario {
     min-height: 70vh;
   }
+ .rotulo {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-radius: 0;
+    padding: 1rem 1.25rem;
+  }
 }
+
+/* PEGAR AQUÍ */
+
+#visual {
+  width: 100%;
+  min-height: 560px;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(255,255,255,0.12);
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  padding: 1rem;
+}
+
+
+
